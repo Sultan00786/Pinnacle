@@ -1,0 +1,21 @@
+{
+   "name": "@repo/db",
+   "version": "1.0.0",
+   "type": "module",
+   "exports": {
+      "./client": "./src/client.ts"
+   },
+   "main": "./dist/index.js",
+   "scripts": {
+      "build": "tsc",
+      "generate": "prisma generate",
+      "migrate": "prisma migrate dev"
+   },
+   "dependencies": {
+      "@prisma/client": "^6.1.0"
+   },
+   "devDependencies": {
+      "prisma": "^6.1.0",
+      "typescript": "^5.5.4"
+   }
+}
