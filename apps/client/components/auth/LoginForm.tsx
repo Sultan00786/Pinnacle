@@ -1,27 +1,38 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
    const router = useRouter();
+   const [formData, setFormData] = useState({
+      email: "",
+      password: "",
+   });
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">Log in</h1>
          <p className="text-gray-500 mb-6">
             Welcome back! Please enter your details.
          </p>
-         <div>
+         <form>
             <Input
                label="Email"
                placeholder="Enter your email"
                id="email"
                type="email"
+               getFormValue={(value) =>
+                  setFormData({ ...formData, email: value })
+               }
             />
             <Input
                label="Password"
                placeholder="Enter your password"
                id="password"
                type="password"
+               getFormValue={(value) =>
+                  setFormData({ ...formData, password: value })
+               }
             />
 
             <Button onclick={() => {}}>Login</Button>
@@ -34,7 +45,7 @@ export default function LoginForm() {
                   Sign up
                </span>
             </p>
-         </div>
+         </form>
       </div>
    );
 }

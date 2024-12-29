@@ -2,7 +2,7 @@ import React from "react";
 
 interface InputProps {
    id: string;
-   label: string;
+   label?: string;
    placeholder: string;
    type?: string;
    getFormValue: (value: HTMLInputElement["value"]) => void;
@@ -17,9 +17,14 @@ function Input({
 }: InputProps) {
    return (
       <div className=" w-full mb-3">
-         <label className="text-[15px] text-gray-500 font-semibold block mb-[2px]">
-            {label}
-         </label>
+         {label && (
+            <label
+               htmlFor={id}
+               className="block text-sm font-medium text-gray-700"
+            >
+               {label}
+            </label>
+         )}
          <input
             id={id}
             type={type || "text"}

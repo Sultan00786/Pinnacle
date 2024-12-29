@@ -20,8 +20,8 @@ export default function SignUpForm() {
          <p className="text-gray-600 mb-6">
             Please enter your details.
          </p>
-         <div>
-            <div className=" w-full md:flex gap-4">
+         <form>
+            <div className="flex gap-4">
                <Input
                   id="firstName"
                   placeholder="ex: John"
@@ -107,7 +107,7 @@ export default function SignUpForm() {
                   Login
                </span>
             </p>
-         </div>
+         </form>
       </div>
    );
 }
