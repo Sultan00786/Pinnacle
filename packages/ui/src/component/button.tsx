@@ -13,7 +13,7 @@ export default function Button({
       <button
          onClick={onclick}
          type="button"
-         className="w-full bg-blue-500 text-white font-semibold rounded-lg h-12 mt-6 transition-all duration-150 hover:scale-95"
+         className="w-full bg-blue-500 text-white font-semibold rounded-lg h-10 mt-4 transition-all duration-150 hover:scale-95"
       >
          {children}
       </button>
