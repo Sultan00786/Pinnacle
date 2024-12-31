@@ -96,7 +96,7 @@ export default function SignUpForm() {
                   console.log(formData);
                }}
             >
-               Sign up
+               Next
             </Button>
             <p className="text-center text-gray-600 mt-4">
                Already have an account?{" "}

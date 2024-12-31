@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 
 export default function AddCardForm() {
    const router = useRouter();
-   const [formData, setFormData] = useState({});
+   const [formData, setFormData] = useState({
+      cardholderName: "",
+      phoneNumber: "",
+      cardNumber: "",
+      month: "",
+      year: "",
+      cvv: "",
+   });
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">
@@ -24,7 +31,7 @@ export default function AddCardForm() {
                      getFormValue={(value) =>
                         setFormData({
                            ...formData,
-                           email: value,
+                           cardholderName: value,
                         })
                      }
                   />
@@ -38,7 +45,7 @@ export default function AddCardForm() {
                      getFormValue={(value) =>
                         setFormData({
                            ...formData,
-                           email: value,
+                           phoneNumber: value,
                         })
                      }
                   />
@@ -50,12 +57,12 @@ export default function AddCardForm() {
                id="cardNumber"
                type="number"
                getFormValue={(value) =>
-                  setFormData({ ...formData, password: value })
+                  setFormData({ ...formData, cardNumber: value })
                }
             />
 
             <div className="flex gap-4">
-               <ExpiryDateInput />
+               <ExpiryDateInput setFormData={setFormData} />
 
                <div className=" w-[100px]">
                   <Input
@@ -66,14 +73,20 @@ export default function AddCardForm() {
                      getFormValue={(value) =>
                         setFormData({
                            ...formData,
-                           password: value,
+                           cvv: value,
                         })
                      }
                   />
                </div>
             </div>
 
-            <Button onclick={() => {}}>Next</Button>
+            <Button
+               onclick={() => {
+                  console.log(formData);
+               }}
+            >
+               Next
+            </Button>
             <p className="text-center text-gray-600 mt-4">
                Don't have an account?{" "}
                <span
@@ -88,7 +101,22 @@ export default function AddCardForm() {
    );
 }
 
-function ExpiryDateInput() {
+type SetFormDataType = React.Dispatch<
+   React.SetStateAction<{
+      cardholderName: string;
+      phoneNumber: string;
+      cardNumber: string;
+      month: string;
+      year: string;
+      cvv: string;
+   }>
+>;
+
+function ExpiryDateInput({
+   setFormData,
+}: {
+   setFormData: SetFormDataType;
+}) {
    return (
       <div>
          <label
@@ -104,6 +132,12 @@ function ExpiryDateInput() {
                id="expiryDate"
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
                placeholder="mm"
+               onChange={(e) => {
+                  setFormData((prev) => ({
+                     ...prev,
+                     month: e.target.value,
+                  }));
+               }}
             />
             <div className=" w-4 h-9 flex items-center justify-center">
                <div className=" w-[2px] h-[33px] bg-gray-400 rotate-[18deg]"></div>
@@ -114,6 +148,12 @@ function ExpiryDateInput() {
                id="expiryDate"
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
                placeholder="yy"
+               onChange={(e) => {
+                  setFormData((prev) => ({
+                     ...prev,
+                     year: e.target.value,
+                  }));
+               }}
             />
          </div>
       </div>

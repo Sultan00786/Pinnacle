@@ -26,7 +26,7 @@ export default function AuthComponent({
                {authType === "signup" ? (
                   <SignUpForm />
                ) : (
-                  <AddCardForm />
+                  <LoginForm />
                )}
             </div>
          </div>
