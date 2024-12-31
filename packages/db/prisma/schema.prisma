@@ -23,4 +23,25 @@ model User {
   state          String
   dateOfBirth    DateTime
   createdAt      DateTime  @default(now())
+  accounts       Account[]
+}
+
+model Account {
+  id                  Int      @id @default(autoincrement())
+  accountHolder       String
+  accountNo           String  @unique
+  balance             Int
+  phone               String
+  expiryDate          String
+  cvv                 Int
+  createdAt           DateTime @default(now())
+  userId              Int
+  user                User     @relation(fields: [userId], references: [id])
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  otp       Int      @unique
+  isExpired Boolean
+  createdAt DateTime @default(now())
 }
