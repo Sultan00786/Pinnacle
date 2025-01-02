@@ -22,7 +22,7 @@ export default function RootLayout({
    return (
       <html lang="en" className={ubuntu.className}>
          <Provider>
-            <body className=" m-0 p-0 block">
+            <body className=" m-0 p-0 overflow-auto">
                {children}
             </body>
          </Provider>
