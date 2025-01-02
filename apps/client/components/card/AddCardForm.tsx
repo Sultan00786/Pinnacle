@@ -2,17 +2,22 @@
 import React, { useState } from "react";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { AddCardInputProps } from "@repo/interface/interface";
 
 export default function AddCardForm() {
    const router = useRouter();
-   const [formData, setFormData] = useState({
-      cardholderName: "",
-      phoneNumber: "",
-      cardNumber: "",
+   const [expiryDate, setExpiryDate] = useState({
       month: "",
       year: "",
-      cvv: "",
    });
+
+   const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitSuccessful },
+   } = useForm<AddCardInputProps>();
+
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">
@@ -27,27 +32,21 @@ export default function AddCardForm() {
                   <Input
                      label="Cardholder Name"
                      placeholder="ex: John Doe"
-                     id="cardholderName"
-                     getFormValue={(value) =>
-                        setFormData({
-                           ...formData,
-                           cardholderName: value,
-                        })
-                     }
+                     id="cardHolder"
+                     register={register}
+                     errors={errors}
+                     maxLength={50}
                   />
                </div>
                <div className="col-span-2">
                   <Input
                      label="Phone Number"
                      placeholder="ex: 1234567890"
-                     id="phoneNumber"
+                     id="phone"
                      type="number"
-                     getFormValue={(value) =>
-                        setFormData({
-                           ...formData,
-                           phoneNumber: value,
-                        })
-                     }
+                     register={register}
+                     errors={errors}
+                     maxLength={10}
                   />
                </div>
             </div>
@@ -56,34 +55,33 @@ export default function AddCardForm() {
                placeholder="**** **** **** ****"
                id="cardNumber"
                type="number"
-               getFormValue={(value) =>
-                  setFormData({ ...formData, cardNumber: value })
-               }
+               register={register}
+               errors={errors}
+               maxLength={16}
             />
 
             <div className="flex gap-4">
-               <ExpiryDateInput setFormData={setFormData} />
+               <ExpiryDateInput setExpiryDate={setExpiryDate} />
 
                <div className=" w-[100px]">
                   <Input
                      label="CVV"
                      placeholder="ex: 123"
                      id="cvv"
-                     type="password"
-                     getFormValue={(value) =>
-                        setFormData({
-                           ...formData,
-                           cvv: value,
-                        })
-                     }
+                     type="number"
+                     register={register}
+                     errors={errors}
+                     maxLength={3}
                   />
                </div>
             </div>
 
             <Button
-               onClick={() => {
-                  console.log(formData);
-               }}
+               type="submit"
+               onClick={handleSubmit((data) => {
+                  console.log("Submitted");
+                  console.log(data);
+               })}
             >
                Next
             </Button>
@@ -103,19 +101,15 @@ export default function AddCardForm() {
 
 type SetFormDataType = React.Dispatch<
    React.SetStateAction<{
-      cardholderName: string;
-      phoneNumber: string;
-      cardNumber: string;
       month: string;
       year: string;
-      cvv: string;
    }>
 >;
 
 function ExpiryDateInput({
-   setFormData,
+   setExpiryDate,
 }: {
-   setFormData: SetFormDataType;
+   setExpiryDate: SetFormDataType;
 }) {
    return (
       <div>
@@ -133,7 +127,7 @@ function ExpiryDateInput({
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
                placeholder="mm"
                onChange={(e) => {
-                  setFormData((prev) => ({
+                  setExpiryDate((prev) => ({
                      ...prev,
                      month: e.target.value,
                   }));
@@ -149,7 +143,7 @@ function ExpiryDateInput({
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
                placeholder="yy"
                onChange={(e) => {
-                  setFormData((prev) => ({
+                  setExpiryDate((prev) => ({
                      ...prev,
                      year: e.target.value,
                   }));
