@@ -81,7 +81,7 @@ export default function AddCardForm() {
             </div>
 
             <Button
-               onclick={() => {
+               onClick={() => {
                   console.log(formData);
                }}
             >

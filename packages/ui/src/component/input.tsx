@@ -1,21 +1,16 @@
-import { LoginInputProps } from "@repo/interface/interface";
-import React from "react";
+import { InputFileType } from "@repo/interface/interface";
 import {
    FieldError,
-   FieldErrors,
    FieldValues,
    Path,
-   useForm,
    UseFormRegister,
 } from "react-hook-form";
 
-
-
 interface InputProps<T extends FieldValues> {
-   id: Path<T>;
+   id: Path<T>; // Path<T> is a type from react-hook-form
    label?: string;
    placeholder: string;
-   type?: "text" | "email" | "password" | "number";
+   type?: InputFileType;
    register: UseFormRegister<T>;
    maxLength?: number;
    pattern?: RegExp;
@@ -36,6 +31,34 @@ function Input<T extends FieldValues>({
    pattern,
    errors,
 }: InputProps<T>) {
+   const getErrorMessage = (
+      errorType: string | undefined,
+      fieldType?: InputFileType
+   ): string | null => {
+      switch (errorType) {
+         case "required":
+            return "This field is required.";
+
+         case "maxLength":
+            return "This field is too long.";
+
+         case "pattern":
+            if (fieldType === "email")
+               return "Please enter a valid email.";
+
+            if (fieldType === "password")
+               return "Password must be at least 8 characters, include uppercase, lowercase, and a number.";
+
+            if (fieldType === "number")
+               return "Please enter valid numbers.";
+
+            if (fieldType === "date") return null;
+
+         default:
+            return null;
+      }
+   };
+
    return (
       <div className=" w-full mb-3">
          {label && (
@@ -59,16 +82,7 @@ function Input<T extends FieldValues>({
          />
          {errors[id] && (
             <p className="text-red-500 text-sm mt-1">
-               {errors[id]?.type === "required" &&
-                  "This field is required. "}
-               {errors[id]?.type === "maxLength" &&
-                  "This field is too long. "}
-               {errors[id]?.type === "pattern" &&
-               type === "email"
-                  ? "Please enter a valid email"
-                  : type === "password"
-                    ? "Password must be at least 8 characters, include uppercase, lowercase and number"
-                    : "Please enter a valid numbers"}
+               {getErrorMessage(errors[id].type, type)}
             </p>
          )}
       </div>
@@ -76,45 +90,3 @@ function Input<T extends FieldValues>({
 }
 
 export default Input;
-
-// import React from "react";
-
-// interface InputProps {
-//    id: string;
-//    label?: string;
-//    placeholder: string;
-//    type?: string;
-//    getFormValue: (value: HTMLInputElement["value"]) => void;
-// }
-
-// function Input({
-//    label,
-//    placeholder,
-//    type,
-//    id,
-//    getFormValue,
-// }: InputProps) {
-//    return (
-//       <div className=" w-full mb-3">
-//          {label && (
-//             <label
-//                htmlFor={id}
-//                className="block text-sm font-medium text-gray-700"
-//             >
-//                {label}
-//             </label>
-//          )}
-//          <input
-//             id={id}
-//             type={type || "text"}
-//             placeholder={placeholder}
-//             className="w-full border-2 border-gray-300 h-10 rounded-lg px-3 py-2 text-lg"
-//             onChange={(e) => {
-//                getFormValue(e.target.value);
-//             }}
-//          />
-//       </div>
-//    );
-// }
-
-// export default Input;

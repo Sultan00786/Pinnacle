@@ -1,10 +1,11 @@
+import { ReactNode } from "react";
 
 type LoginInputProps = {
     email: string;
     password: string;
  }
 
- type SginUpFormProps = {
+ type SignUpIputProps = {
     firstName: string;
     lastName: string;
     email: string;
@@ -14,7 +15,7 @@ type LoginInputProps = {
     dob: string;
  };
  
- type AddCardFormProps = {
+ type AddCardInputProps = {
     cardNumber: string;
     cardHolder: string;
     phone: string;
@@ -23,4 +24,12 @@ type LoginInputProps = {
     cvv: string;
  };
 
-export type { LoginInputProps, SginUpFormProps, AddCardFormProps };
+ type InputFileType = "text" | "email" | "password" | "number" | "date";
+
+ interface ButtonProps {
+   children: ReactNode;
+   type?: "button" | "submit";
+   onClick?: () => void;
+}
+
+export type { LoginInputProps, SignUpIputProps, AddCardInputProps, InputFileType, ButtonProps };

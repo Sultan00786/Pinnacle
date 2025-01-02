@@ -2,74 +2,71 @@
 import React, { useState } from "react";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { SignUpIputProps } from "@repo/interface/interface";
 
 export default function SignUpForm() {
    const router = useRouter();
-   const [formData, setFormData] = useState({
-      firstName: "",
-      lastName: "",
-      address: "",
-      state: "",
-      dob: "",
-      email: "",
-      password: "",
-   });
+   const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitSuccessful },
+   } = useForm<SignUpIputProps>();
+
+   const onSignUp: SubmitHandler<SignUpIputProps> = (data) => {
+      console.log("hellow");
+      console.log(data);
+   };
+
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">Sign up</h1>
          <p className="text-gray-600 mb-6">
             Please enter your details.
          </p>
-         <form>
+         <form onSubmit={handleSubmit(onSignUp)}>
             <div className="flex gap-4">
                <Input
                   id="firstName"
                   placeholder="ex: John"
                   label="First Name"
-                  getFormValue={(value) =>
-                     setFormData({
-                        ...formData,
-                        firstName: value,
-                     })
-                  }
+                  errors={errors}
+                  register={register}
+                  maxLength={30}
                />
                <Input
                   label="Last Name"
                   id="lastName"
                   placeholder="ex: Doe"
-                  getFormValue={(value) =>
-                     setFormData({
-                        ...formData,
-                        lastName: value,
-                     })
-                  }
+                  errors={errors}
+                  register={register}
+                  maxLength={30}
                />
             </div>
             <Input
                label="Address"
                id="address"
                placeholder="Enter your specific address"
-               getFormValue={(value) =>
-                  setFormData({ ...formData, address: value })
-               }
+               errors={errors}
+               register={register}
+               maxLength={200}
             />
             <div className="flex gap-4">
                <Input
                   label="State"
                   id="state"
                   placeholder="ex: Lagos"
-                  getFormValue={(value) =>
-                     setFormData({ ...formData, state: value })
-                  }
+                  errors={errors}
+                  register={register}
+                  maxLength={30}
                />
                <Input
                   label="Dater of Birth"
                   placeholder="yyyy-mm-dd"
                   id="dob"
                   type="date"
-                  getFormValue={(value) =>
-                     setFormData({ ...formData, dob: value })
-                  }
+                  errors={errors}
+                  register={register}
                />
             </div>
             <Input
@@ -77,24 +74,26 @@ export default function SignUpForm() {
                placeholder="Enter your email"
                id="email"
                type="email"
-               getFormValue={(value) =>
-                  setFormData({ ...formData, email: value })
-               }
+               errors={errors}
+               register={register}
+               pattern={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
             />
             <Input
                label="Password"
                placeholder="Enter your password"
                id="password"
                type="password"
-               getFormValue={(value) =>
-                  setFormData({ ...formData, password: value })
+               errors={errors}
+               register={register}
+               pattern={
+                  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
                }
             />
 
             <Button
-               onclick={() => {
-                  console.log(formData);
-               }}
+               type="submit"
+               onClick={handleSubmit(onSignUp)}
+               // onclick={() => console.log("hello")}
             >
                Next
             </Button>

@@ -15,7 +15,7 @@ export default function AuthComponent({
             className={`w-full h-[100vh] flex justify-center ${authType == "login" && "items-center"}`}
          >
             <div
-               className={` ${authType === "login" ? "md:max-w-[370px]" : " md:max-w-[420px]"} w-4/5  overflow-y-hidden`}
+               className={` ${authType === "login" ? "md:max-w-[370px]" : " md:max-w-[420px]"} w-4/5`}
             >
                {/* logo */}
                <div className=" my-6">
