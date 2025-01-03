@@ -1,0 +1,17 @@
+{
+   "name": "@repo/store",
+   "version": "0.0.0",
+   "exports": {
+      "./recoil": "./src/index.ts"
+   },
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "description": "",
+   "dependencies": {
+      "recoil": "^0.7.7"
+   }
+}

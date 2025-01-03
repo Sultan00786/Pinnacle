@@ -7,7 +7,7 @@ export default function Home() {
    const router = useRouter();
 
    if (!session?.data?.user) {
-      router.push("/signup");
+      router.push("/login");
    } else {
       router.push("/dashboard");
    }

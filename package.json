@@ -21,6 +21,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@next/font": "^14.2.15"
+    "@next/font": "^14.2.15",
+    "twilio": "^5.4.0"
   }
 }
