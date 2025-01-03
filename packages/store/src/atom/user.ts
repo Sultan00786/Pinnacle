@@ -15,5 +15,12 @@ const userState = atom({
     }
 })
 
+const stepState = atom({
+    key:"step",
+    default:1
+})
+
 const [user, setUser] = useRecoilState(userState);
-export {user, setUser};
+const [step, setStep] = useRecoilState(stepState);
+
+export {user, step, setUser, setStep};

@@ -13,18 +13,13 @@ export default function SignUpForm() {
       formState: { errors, isSubmitSuccessful },
    } = useForm<SignUpIputProps>();
 
-   const onSignUp: SubmitHandler<SignUpIputProps> = (data) => {
-      console.log("hellow");
-      console.log(data);
-   };
-
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">Sign up</h1>
          <p className="text-gray-600 mb-6">
             Please enter your details.
          </p>
-         <form onSubmit={handleSubmit(onSignUp)}>
+         <form>
             <div className="flex gap-4">
                <Input
                   id="firstName"
@@ -92,12 +87,14 @@ export default function SignUpForm() {
 
             <Button
                type="submit"
-               onClick={handleSubmit(onSignUp)}
-               // onclick={() => console.log("hello")}
+               onClick={handleSubmit((data) => {
+                  console.log("Submitted");
+                  console.log(data);
+               })}
             >
                Next
             </Button>
-            <p className="text-center text-gray-600 mt-4">
+            <p className="text-center text-gray-600 mt-4 pb-4">
                Already have an account?{" "}
                <span
                   onClick={() => router.push("/login")}

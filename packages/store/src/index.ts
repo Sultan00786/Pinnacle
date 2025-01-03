@@ -1,3 +1,3 @@
-import { setUser, user } from "./atom/user";
+import { user, step, setUser, setStep } from "./atom/user";
 
-export { setUser, user };
+export { user, step, setUser, setStep };

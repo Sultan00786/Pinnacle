@@ -17,7 +17,7 @@ export default function AddCardForm() {
       handleSubmit,
       formState: { errors, isSubmitSuccessful },
    } = useForm<AddCardInputProps>();
-
+ 
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">
@@ -47,6 +47,7 @@ export default function AddCardForm() {
                      register={register}
                      errors={errors}
                      maxLength={10}
+                     minLength={10}
                   />
                </div>
             </div>
@@ -58,6 +59,7 @@ export default function AddCardForm() {
                register={register}
                errors={errors}
                maxLength={16}
+               minLength={16}
             />
 
             <div className="flex gap-4">
@@ -72,6 +74,7 @@ export default function AddCardForm() {
                      register={register}
                      errors={errors}
                      maxLength={3}
+                     minLength={3}
                   />
                </div>
             </div>
