@@ -94,7 +94,7 @@ export default function AddCardForm() {
                   onClick={() => router.push("/signup")}
                   className="text-sky-700 font-semibold cursor-pointer transition-all duration-150 hover:text-sky-900"
                >
-                  Sign up
+                  Next
                </span>
             </p>
          </form>

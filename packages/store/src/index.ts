@@ -1,3 +1,8 @@
-import { user, step, setUser, setStep } from "./atom/user";
+import { combineReducers } from "@reduxjs/toolkit";
+import { authSlice, setStep, setUser } from "./slice/user";
 
-export { user, step, setUser, setStep };
+export const rootReducer = combineReducers({
+   auth: authSlice.reducer,
+});
+
+export { setStep, setUser };
