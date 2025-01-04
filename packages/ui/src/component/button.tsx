@@ -5,12 +5,13 @@ export default function Button({
    onClick,
    type = "button",
    children,
+   variant = "Primary",
 }: ButtonProps) {
    return (
       <button
-         onClick={onClick|| (() => {})}
+         onClick={onClick || (() => {})}
          type={type}
-         className="w-full bg-blue-500 text-white font-semibold rounded-lg h-10 mt-4 transition-all duration-150 hover:scale-95"
+         className={` ${variant === "Primary" ? "bg-blue-500 text-white" : " text-gray-800 border-2 border-gray-600"}  w-full font-semibold rounded-lg h-10 mt-4 transition-all duration-150 hover:scale-95`}
       >
          {children}
       </button>
