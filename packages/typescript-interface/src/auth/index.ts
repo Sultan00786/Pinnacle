@@ -1,35 +1,47 @@
 import { ReactNode } from "react";
 
 type LoginInputProps = {
-    email: string;
-    password: string;
- }
+   email: string;
+   password: string;
+};
 
- type SignUpIputProps = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    address: string;
-    state: string;
-    dob: string;
- };
- 
- type AddCardInputProps = {
-    cardNumber: string;
-    cardHolder: string;
-    phone: string;
-    month: string;
-    year: string;
-    cvv: string;
- };
+type SignUpIputProps = {
+   firstName: string;
+   lastName: string;
+   email: string;
+   password: string;
+   address: string;
+   state: string;
+   dob: string;
+};
 
- type InputFileType = "text" | "email" | "password" | "number" | "date";
+type AddCardInputProps = {
+   cardNumber: string;
+   cardHolder: string;
+   phone: string;
+   month: string;
+   year: string;
+   cvv: string;
+};
 
- interface ButtonProps {
+type InputFileType =
+   | "text"
+   | "email"
+   | "password"
+   | "number"
+   | "date";
+
+interface ButtonProps {
    children: ReactNode;
    type?: "button" | "submit";
+   variant?: "Primary" | "Secondary";
    onClick?: () => void;
 }
 
-export type { LoginInputProps, SignUpIputProps, AddCardInputProps, InputFileType, ButtonProps };
+export type {
+   LoginInputProps,
+   SignUpIputProps,
+   AddCardInputProps,
+   InputFileType,
+   ButtonProps,
+};
