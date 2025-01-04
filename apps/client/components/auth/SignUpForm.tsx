@@ -1,17 +1,24 @@
 "use client";
-import React, { useState } from "react";
+import { SignUpIputProps } from "@repo/interface/interface";
+import { setStep, setUser } from "@repo/store/recoil";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { SignUpIputProps } from "@repo/interface/interface";
+import { useDispatch } from "react-redux";
 
 export default function SignUpForm() {
    const router = useRouter();
+   const dispatch = useDispatch();
    const {
       register,
       handleSubmit,
       formState: { errors, isSubmitSuccessful },
    } = useForm<SignUpIputProps>();
+
+   const onSignUp:SubmitHandler<SignUpIputProps> = (data) => {
+      dispatch(setUser(data))
+      dispatch(setStep(2))
+   }
 
    return (
       <div>
@@ -87,10 +94,7 @@ export default function SignUpForm() {
 
             <Button
                type="submit"
-               onClick={handleSubmit((data) => {
-                  console.log("Submitted");
-                  console.log(data);
-               })}
+               onClick={handleSubmit(onSignUp)}
             >
                Next
             </Button>

@@ -1,12 +1,24 @@
 "use client";
-import React, { useState } from "react";
+import {
+   AddCardInputProps,
+   RootState,
+} from "@repo/interface/interface";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { AddCardInputProps } from "@repo/interface/interface";
+import React, { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { setUpRecaptcha } from "../../lib/firebaseAuth";
+import { setAccount, setStep } from "@repo/store/recoil";
+import BackButton from "./BackButton";
+import { ConfirmationResult } from "firebase/auth";
 
 export default function AddCardForm() {
    const router = useRouter();
+   const { user } = useSelector(
+      (state: RootState) => state.auth
+   );
+   const dispatch = useDispatch();
    const [expiryDate, setExpiryDate] = useState({
       month: "",
       year: "",
@@ -17,7 +29,26 @@ export default function AddCardForm() {
       handleSubmit,
       formState: { errors, isSubmitSuccessful },
    } = useForm<AddCardInputProps>();
- 
+
+   const onSubmit: SubmitHandler<AddCardInputProps> = async (
+      data
+   ) => {
+      try {
+         const respone = await setUpRecaptcha(
+            "+91" + data.phone,
+            "recaptcha-div"
+         );
+
+         window.confirmationResult = respone;
+
+         const combineData = { ...data, ...expiryDate };
+         dispatch(setAccount(combineData));
+         dispatch(setStep(3));
+      } catch (error) {
+         console.error(error);
+      }
+   };
+
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">
@@ -79,24 +110,15 @@ export default function AddCardForm() {
                </div>
             </div>
 
+            <div id="recaptcha-div"></div>
+
             <Button
                type="submit"
-               onClick={handleSubmit((data) => {
-                  console.log("Submitted");
-                  console.log(data);
-               })}
+               onClick={handleSubmit(onSubmit)}
             >
                Next
             </Button>
-            <p className="text-center text-gray-600 mt-4">
-               Don't have an account?{" "}
-               <span
-                  onClick={() => router.push("/signup")}
-                  className="text-sky-700 font-semibold cursor-pointer transition-all duration-150 hover:text-sky-900"
-               >
-                  Next
-               </span>
-            </p>
+            <BackButton step={1} />
          </form>
       </div>
    );
