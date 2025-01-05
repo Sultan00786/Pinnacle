@@ -12,6 +12,7 @@ import { setUpRecaptcha } from "../../lib/firebaseAuth";
 import { setAccount, setStep } from "@repo/store/recoil";
 import BackButton from "./BackButton";
 import { ConfirmationResult } from "firebase/auth";
+import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
 
 export default function AddCardForm() {
    const router = useRouter();
@@ -33,6 +34,14 @@ export default function AddCardForm() {
    const onSubmit: SubmitHandler<AddCardInputProps> = async (
       data
    ) => {
+      const response = await isAccountPressent(data.cardNumber);
+      if (!response.success) {
+         console.assert(
+            "Card already exsist, Enter different card number"
+         );
+         return null;
+      }
+
       try {
          const respone = await setUpRecaptcha(
             "+91" + data.phone,

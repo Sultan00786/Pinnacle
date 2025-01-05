@@ -5,6 +5,7 @@ import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { isUserPresent } from "../../app/lib/action/isUserPresent";
 
 export default function SignUpForm() {
    const router = useRouter();
@@ -15,7 +16,14 @@ export default function SignUpForm() {
       formState: { errors, isSubmitSuccessful },
    } = useForm<SignUpIputProps>();
 
-   const onSignUp:SubmitHandler<SignUpIputProps> = (data) => {
+   const onSignUp:SubmitHandler<SignUpIputProps> = async (data) => {
+      const response = await isUserPresent(data.email)
+
+      if(!response.success) {
+         console.assert("This email is aready present, Enter different email")
+         return
+      }
+
       dispatch(setUser(data))
       dispatch(setStep(2))
    }

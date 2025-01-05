@@ -12,13 +12,11 @@ export default function OtpVerify() {
    const renderInput = (props: any) => <input {...props} />;
 
    const onSubmit = async () => {
-      console.log("OTP submitted:", otp);
       const confirmationResult = window.confirmationResult;
       confirmationResult
       .confirm(otp)
       .then((result) => {
-         console.log(result);
-         console.log("User signed in successfully");
+         
       })
       .catch((error) => {
          console.error(
