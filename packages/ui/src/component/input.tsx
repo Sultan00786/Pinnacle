@@ -13,6 +13,7 @@ interface InputProps<T extends FieldValues> {
    type?: InputFileType;
    register: UseFormRegister<T>;
    maxLength?: number;
+   minLength?: number;
    pattern?: RegExp;
    errors: {
       [key in Path<T>]?: FieldError;
@@ -28,10 +29,10 @@ function Input<T extends FieldValues>({
    id,
    register,
    maxLength,
+   minLength,
    pattern,
    errors,
 }: InputProps<T>) {
-   
    const getErrorMessage = (
       errorType: string | undefined,
       fieldType?: InputFileType
@@ -42,6 +43,9 @@ function Input<T extends FieldValues>({
 
          case "maxLength":
             return "This field is too long.";
+
+         case "minLength":
+            return "This field is too short.";
 
          case "pattern":
             if (fieldType === "email")
@@ -77,7 +81,8 @@ function Input<T extends FieldValues>({
             {...register(id, {
                required: true,
                maxLength: maxLength || 70,
-               pattern: pattern || /^[A-Za-z]+$/i,
+               minLength: minLength || 1,
+               pattern: pattern || undefined,
             })}
             className="w-full border-2 border-gray-300 h-10 rounded-lg px-3 py-2 text-lg"
          />
