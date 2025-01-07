@@ -7,7 +7,7 @@ export const accountSlice = createSlice({
     initialState: null,
     reducers: {
         setAccount: (state, action) => {
-            state = action.payload
+            return action.payload
         }
     },
 })

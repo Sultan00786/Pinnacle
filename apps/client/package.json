@@ -17,17 +17,22 @@
       "@repo/store": "*",
       "@repo/ui": "*",
       "axios": "^1.7.9",
+      "bcrypt": "^5.1.1",
+      "bcryptjs": "^2.4.3",
       "firebase": "^11.1.0",
       "next": "^15.1.0",
       "next-auth": "^4.24.11",
       "react": "^19.0.0",
       "react-dom": "^19.0.0",
       "react-hook-form": "^7.54.2",
-      "react-redux": "^9.2.0"
+      "react-redux": "^9.2.0",
+      "react-toastify": "^11.0.2"
    },
    "devDependencies": {
       "@repo/eslint-config": "*",
       "@repo/typescript-config": "*",
+      "@types/bcrypt": "^5.0.2",
+      "@types/bcryptjs": "^2.4.6",
       "@types/node": "^20",
       "@types/react": "18.3.1",
       "@types/react-dom": "18.3.0",

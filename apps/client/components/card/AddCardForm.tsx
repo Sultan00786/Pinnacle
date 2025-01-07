@@ -5,13 +5,16 @@ import {
 } from "@repo/interface/interface";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { setUpRecaptcha } from "../../lib/firebaseAuth";
 import { setAccount, setStep } from "@repo/store/recoil";
 import BackButton from "./BackButton";
 import { ConfirmationResult } from "firebase/auth";
+import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
+import { toast, ToastContentProps } from "react-toastify";
+import Msg from "../toast/MsgCard";
 
 export default function AddCardForm() {
    const router = useRouter();
@@ -33,21 +36,46 @@ export default function AddCardForm() {
    const onSubmit: SubmitHandler<AddCardInputProps> = async (
       data
    ) => {
+      const toadLoaing = toast.loading("Please wait");
+      const response = await isAccountPressent(data.cardNumber);
+      if (!response.success) {
+         toast.update(toadLoaing, {
+            render:
+               "This card is aready present, Enter different Card Number",
+            type: "error",
+            isLoading: false,
+            autoClose: 6000,
+         });
+         toast.dismiss(toadLoaing);
+         return;
+      }
+
       try {
          const respone = await setUpRecaptcha(
             "+91" + data.phone,
             "recaptcha-div"
          );
-
          window.confirmationResult = respone;
 
          const combineData = { ...data, ...expiryDate };
          dispatch(setAccount(combineData));
          dispatch(setStep(3));
+         toast.dismiss(toadLoaing);
       } catch (error) {
          console.error(error);
       }
    };
+
+   useEffect(() => {
+      const toastId = "instruction-toast";
+      if (!toast.isActive(toastId)) {
+         toast(Msg, {
+            toastId: toastId,
+            closeButton: false,
+            autoClose: false,
+         });
+      }
+   }, []);
 
    return (
       <div>
@@ -72,7 +100,7 @@ export default function AddCardForm() {
                <div className="col-span-2">
                   <Input
                      label="Phone Number"
-                     placeholder="ex: 1234567890"
+                     placeholder="use: 1234567890"
                      id="phone"
                      type="number"
                      register={register}
@@ -140,7 +168,7 @@ function ExpiryDateInput({
       <div>
          <label
             htmlFor="expiryDate"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
          >
             Expiry Date
          </label>
@@ -178,3 +206,5 @@ function ExpiryDateInput({
       </div>
    );
 }
+
+

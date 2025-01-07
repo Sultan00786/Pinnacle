@@ -1,32 +1,92 @@
 import { Button } from "@repo/ui/component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import BackButton from "./BackButton";
+import { signIn, signOut } from "next-auth/react";
+import { useSelector } from "react-redux";
+import { RootOptions } from "react-dom/client";
+import { RootState } from "@repo/interface/interface";
+import { useRouter } from "next/navigation";
+import { createAccount } from "../../app/lib/action/createAccount";
+import { nextAuthSignUp } from "../../lib/nextAuthSignupCall";
+import { Id, toast } from "react-toastify";
+import MsgOtp from "../toast/MsgOtp";
 
 export default function OtpVerify() {
    const [otp, setOtp] = useState("");
-   const [confirmObj, setConfirmObj] = useState("");
-
    const handleChange = (code: string) => setOtp(code);
-
    const renderInput = (props: any) => <input {...props} />;
 
+   const router = useRouter();
+
+   const { user } = useSelector(
+      (state: RootState) => state.auth
+   );
+   const account = useSelector(
+      (state: RootState) => state.account
+   );
+
+   async function afterVerification(toastLoaing:Id) {
+      const response = await signIn("credentials", {
+         firstName: user?.firstName,
+         lastName: user?.lastName,
+         email: user?.email,
+         password: user?.password,
+         address: user?.address,
+         dob: user?.dob,
+         state: user?.state,
+         redirect: false,
+      });
+
+      if (response?.status !== 200) {
+         toast.update(toastLoaing, {
+            render: "Error occure while verifying OTP",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000,
+         })
+         console.error("Sign-in failed", response);
+         return;
+      }
+      const res = await nextAuthSignUp(account);
+      if (res.status) {
+         toast.dismiss(toastLoaing)
+         router.push("/dashboard");
+      }
+   }
+
    const onSubmit = async () => {
-      console.log("OTP submitted:", otp);
+      const toastLoaing = toast.loading("Please wait");
       const confirmationResult = window.confirmationResult;
       confirmationResult
-      .confirm(otp)
-      .then((result) => {
-         console.log(result);
-         console.log("User signed in successfully");
-      })
-      .catch((error) => {
-         console.error(
-            "Error verifying code:",
-            error.message
-         );
-      });
+         .confirm(otp)
+         .then((result) => {
+            afterVerification(toastLoaing)
+         })
+         .catch((error) => {
+            toast.update(toastLoaing, {
+               render: "Error occure while verifying OTP",
+               type: "error",
+               isLoading: false,
+               autoClose: 3000,
+            })
+            console.error(
+               "Error verifying code:",
+               error.message
+            );
+         });
    };
+
+   useEffect(()=> {
+      const toastId = "otp-instruction"
+      if(!toast.isActive(toastId)){
+         toast(MsgOtp, {
+            toastId: toastId,
+            closeButton: false,
+            autoClose: false,
+         });
+      }
+   }, [])
 
    return (
       <div className="App">
