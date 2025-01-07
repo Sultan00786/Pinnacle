@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { isUserPresent } from "../../app/lib/action/isUserPresent";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 export default function SignUpForm() {
    const router = useRouter();
@@ -16,16 +18,26 @@ export default function SignUpForm() {
       formState: { errors, isSubmitSuccessful },
    } = useForm<SignUpIputProps>();
 
-   const onSignUp:SubmitHandler<SignUpIputProps> = async (data) => {
-      const response = await isUserPresent(data.email)
-      if(!response.success) {
-         alert("This email is aready present, Enter different email")
-         return
+   const onSignUp: SubmitHandler<SignUpIputProps> = async (
+      data
+   ) => {
+      const toatId = toast.loading("Please wait");
+      const response = await isUserPresent(data.email);
+      if (!response.success) {
+         toast.update(toatId, {
+            render:
+               "This email is aready present, Enter different email",
+            type: "error",
+            isLoading: false,
+            autoClose: 6000,
+         });
+         return;
       }
 
-      dispatch(setUser(data))
-      dispatch(setStep(2))
-   }
+      dispatch(setUser(data));
+      dispatch(setStep(2));
+      toast.dismiss(toatId)
+   };
 
    return (
       <div>
