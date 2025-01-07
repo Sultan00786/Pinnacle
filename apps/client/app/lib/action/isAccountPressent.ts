@@ -1,33 +1,33 @@
-import { prisma } from "@repo/db/client"
+"use server";
 
+import { prisma } from "@repo/db/client";
 
-export const isAccountPressent= async (accountNo: string) => {
-    try {
-        const account = await prisma.account.findFirst({
-            where: {
-                accountNo: accountNo
-            }
-        })
+export const isAccountPressent = async (accountNo: string) => {
+   try {
+      const account = await prisma.account.findFirst({
+         where: {
+            accountNo: accountNo,
+         },
+      });
 
-        if(account?.id) {
-            return {
-                success: false,
-                message: "Account is Present",
-                data: account
-            }
-        }
-
-        return {
-            success: true,
-            message: "Account is not Present",
-        }
-    } catch (error) {
-        console.log(error)
-        return {
+      if (account?.id) {
+         return {
             success: false,
-            message: "Something went wrong",
-            error: error
-        }
-    }
-}
+            message: "Account is Present",
+            data: account,
+         };
+      }
 
+      return {
+         success: true,
+         message: "Account is not Present",
+      };
+   } catch (error) {
+      console.log(error);
+      return {
+         success: false,
+         message: "Something went wrong",
+         error: error,
+      };
+   }
+};

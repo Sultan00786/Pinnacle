@@ -36,10 +36,8 @@ export default function AddCardForm() {
    ) => {
       const response = await isAccountPressent(data.cardNumber);
       if (!response.success) {
-         console.assert(
-            "Card already exsist, Enter different card number"
-         );
-         return null;
+         alert("Card already exsist, Enter different card number");
+         return;
       }
 
       try {
@@ -47,7 +45,6 @@ export default function AddCardForm() {
             "+91" + data.phone,
             "recaptcha-div"
          );
-
          window.confirmationResult = respone;
 
          const combineData = { ...data, ...expiryDate };

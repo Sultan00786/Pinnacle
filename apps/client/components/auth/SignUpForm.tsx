@@ -18,9 +18,8 @@ export default function SignUpForm() {
 
    const onSignUp:SubmitHandler<SignUpIputProps> = async (data) => {
       const response = await isUserPresent(data.email)
-
       if(!response.success) {
-         console.assert("This email is aready present, Enter different email")
+         alert("This email is aready present, Enter different email")
          return
       }
 

@@ -1,6 +1,6 @@
 import { prisma } from "@repo/db/client"
 import CredentialsProvider from "next-auth/providers/credentials"
-import {hash, compare} from "bcrypt"
+import bcrypt from "bcryptjs"
 
 type CredentialType = Record<"email" | "password" | "firstName" | "lastName" | "address" | "state" | "dob", string>
 
@@ -64,7 +64,7 @@ export const authOption = {
                             throw new Error("All fields are required !!")
                         }
 
-                        const hashPassword = await hash(password, 10)
+                        const hashPassword = await bcrypt.hash(password, 10)
     
                         const user = await prisma.user.create({
                             data: {
@@ -102,7 +102,7 @@ export const authOption = {
                         if(!user){
                             throw new Error("User not found !!")
                         }
-                        const isPasswordCorrect = await compare(password, user.password)
+                        const isPasswordCorrect = await bcrypt.compare(password, user.password)
                         if(!isPasswordCorrect){
                             throw new Error("Password is incorrect !!")
                         }
