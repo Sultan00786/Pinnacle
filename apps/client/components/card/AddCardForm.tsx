@@ -38,7 +38,7 @@ export default function AddCardForm() {
    ) => {
       const toadLoaing = toast.loading("Please wait");
       const response = await isAccountPressent(data.cardNumber);
-      if (!response.success) {
+      if (response.success) {
          toast.update(toadLoaing, {
             render:
                "This card is aready present, Enter different Card Number",
@@ -46,7 +46,6 @@ export default function AddCardForm() {
             isLoading: false,
             autoClose: 6000,
          });
-         toast.dismiss(toadLoaing);
          return;
       }
 

@@ -12,14 +12,14 @@ export const isAccountPressent = async (accountNo: string) => {
 
       if (account?.id) {
          return {
-            success: false,
+            success: true,
             message: "Account is Present",
             data: account,
          };
       }
 
       return {
-         success: true,
+         success: false,
          message: "Account is not Present",
       };
    } catch (error) {

@@ -89,7 +89,7 @@ export default function OtpVerify() {
    }, [])
 
    return (
-      <div className="App">
+      <form className="App">
          <h1 className="text-4xl font-bold mb-2">Verify OTP</h1>
          <p className="text-gray-500 mb-6">
             Enter the OTP sent to your phone number to complete
@@ -121,6 +121,6 @@ export default function OtpVerify() {
             Verify
          </Button>
          <BackButton step={2} />
-      </div>
+      </form>
    );
 }
