@@ -23,10 +23,7 @@ export default function RootLayout({
    return (
       <html lang="en" className={ubuntu.className}>
          <Provider>
-            <body className=" m-0 p-0 overflow-auto">
-               {children}
-               <ToastContainer/>
-            </body>
+            {children}
          </Provider>
       </html>
    );

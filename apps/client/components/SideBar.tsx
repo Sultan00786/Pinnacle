@@ -47,10 +47,11 @@ function SideBar() {
                   />
                </div>
                <div className="flex flex-col gap-[4px]">
-                  {navigation.map((item) => {
+                  {navigation.map((item, index) => {
                      const isActive = pathname === item.href;
                      return (
                         <div
+                           key={index}
                            className={`group flex items-center px-4 py-[9px] rounded-md cursor-pointer
                         ${
                            isActive
@@ -83,9 +84,7 @@ function SideBar() {
                   <span className="text-sm font-medium">JD</span>
                </div>
                <div className="flex flex-col">
-                  <span className="text-sm font-medium">
-                     John Doe
-                  </span>
+                  <span className="text-sm font-medium">John Doe</span>
                   <span className="text-xs text-muted-foreground">
                      john@example.com
                   </span>
