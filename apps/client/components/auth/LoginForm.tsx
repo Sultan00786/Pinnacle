@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import {
@@ -10,7 +10,7 @@ import {
 import { LoginInputProps } from "@repo/interface/interface";
 import { isUserPresent } from "../../app/lib/action/isUserPresent";
 import { isFloat64Array } from "node:util/types";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 
 export default function LoginForm() {
@@ -60,6 +60,7 @@ export default function LoginForm() {
          throw new Error(response?.error);
       }
    };
+
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">Log in</h1>

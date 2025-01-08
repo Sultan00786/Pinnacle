@@ -1,11 +1,12 @@
 "use client";
 import { RootState } from "@repo/interface/interface";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import AddCardForm from "../card/AddCardForm";
+import OtpVerify from "../card/OtpVerify";
 import Logo from "../Logo";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
-import OtpVerify from "../card/OtpVerify";
 
 export default function AuthComponent({
    authType,
@@ -17,6 +18,9 @@ export default function AuthComponent({
    );
 
    const dispatch = useDispatch();
+   const router = useRouter();
+
+   
    return (
       <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-4">
          <div
