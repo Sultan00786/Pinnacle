@@ -20,7 +20,7 @@ function TransactionTableWithTabs() {
          <Tabs
             variant="underlined"
             classNames={{
-               tabList: "gap-6 w-[750px] border-b border-divider p-0",
+               tabList: "gap-6 w-[850px] border-b border-divider p-0",
                cursor: "w-full bg-purple-500",
                tab: "max-w-fit px-0 h-12 text-[15px] font-semibold",
                tabContent: "group-data-[selected=true]:text-purple-500",

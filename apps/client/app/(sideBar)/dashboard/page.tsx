@@ -4,11 +4,13 @@ import ChartCard from "../../../components/chart/ChartCard";
 import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
 import { Button } from "@nextui-org/react";
 import { PurbleButton } from "@repo/ui/component";
+import { Building2, PlusCircle } from "lucide-react";
+import UserDetail from "../../../components/user/UserDetail";
 
 function Dashboard() {
    return (
-      <div>
-         <div className=" w-[800px] flex flex-col px-6 gap-6">
+      <div className="flex ">
+         <div className="w-[900px] flex flex-col px-6 gap-6">
             <div className=" flex flex-col gap-1 mt-10">
                <h1 className=" font-bold text-3xl">
                   Welcom, <span className=" text-purple-700">Sultan</span>
@@ -31,7 +33,9 @@ function Dashboard() {
             </div>
          </div>
 
-         <div></div>
+         <div>
+            <UserDetail />
+         </div>
       </div>
    );
 }

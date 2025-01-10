@@ -28,17 +28,11 @@ const tabs = [
 
 // export default function SideBar({children}: {children: ReactNode}) {
 
-export default function SideBarLayout({
-   children,
-}: {
-   children: ReactNode;
-}) {
+export default function SideBarLayout({ children }: { children: ReactNode }) {
    return (
-      <div className="flex">
+      <div className="flex w-screen">
          <SideBar />
-         <div>
-            {children}
-         </div>
+         <div className="w-full">{children}</div>
       </div>
    );
 }
