@@ -10,6 +10,7 @@ import {
    Search,
    LogOut,
 } from "lucide-react";
+import { Avatar, User } from "@nextui-org/react";
 
 const navigation = [
    { name: "Home", href: "/dashboard", icon: HomeIcon },
@@ -80,16 +81,22 @@ function SideBar() {
          </nav>
          <div className="border-t p-4">
             <div className="flex items-center gap-3">
-               <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                  <span className="text-sm font-medium">JD</span>
+               {/* <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
+                  <Avatar
+                     name="Sultan"
+                     size="sm"
+                     className="bg-transparent"
+                     isBordered
+                  />
                </div>
                <div className="flex flex-col">
                   <span className="text-sm font-medium">John Doe</span>
                   <span className="text-xs text-muted-foreground">
                      john@example.com
                   </span>
-               </div>
-               <button className="p-2 hover:bg-muted rounded-md text-muted-foreground hover:text-foreground transition-colors">
+               </div> */}
+               <User name="Sultan" description="john@example.com" />
+               <button className="p-2 hover:bg-purple-400 hover:text-white rounded-md text-muted-foreground hover:text-foreground transition-colors">
                   <LogOut className="h-5 w-5" />
                </button>
             </div>

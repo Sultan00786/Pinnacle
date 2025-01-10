@@ -2,8 +2,8 @@
 import { RootState } from "@repo/interface/interface";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import AddCardForm from "../card/AddCardForm";
-import OtpVerify from "../card/OtpVerify";
+import AddCardForm from "../account/AddCardForm";
+import OtpVerify from "../account/OtpVerify";
 import Logo from "../Logo";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";

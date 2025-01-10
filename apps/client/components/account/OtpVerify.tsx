@@ -1,16 +1,14 @@
+import { RootState } from "@repo/interface/interface";
 import { Button } from "@repo/ui/component";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
-import BackButton from "./BackButton";
-import { signIn, signOut } from "next-auth/react";
 import { useSelector } from "react-redux";
-import { RootOptions } from "react-dom/client";
-import { RootState } from "@repo/interface/interface";
-import { useRouter } from "next/navigation";
-import { createAccount } from "../../app/lib/action/createAccount";
-import { nextAuthSignUp } from "../../lib/nextAuthSignupCall";
 import { Id, toast } from "react-toastify";
+import { nextAuthSignUp } from "../../lib/nextAuthSignupCall";
 import MsgOtp from "../toast/MsgOtp";
+import BackButton from "./BackButton";
 
 export default function OtpVerify() {
    const [otp, setOtp] = useState("");
