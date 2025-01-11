@@ -10,7 +10,7 @@ import UserDetail from "../../../components/user/UserDetail";
 function Dashboard() {
    return (
       <div className="flex ">
-         <div className="w-[900px] flex flex-col px-6 gap-6">
+         <div className="w-[900px] h-full flex flex-col px-6 gap-6">
             <div className=" flex flex-col gap-1 mt-10">
                <h1 className=" font-bold text-3xl">
                   Welcom, <span className=" text-purple-700">Sultan</span>

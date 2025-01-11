@@ -16,7 +16,7 @@ const tabs = ["Bank 1", "Bank 2", "Bank 3", "Bank 4", "Bank 5", "Bank 6"];
 
 function TransactionTableWithTabs() {
    return (
-      <div className="w-full">
+      <div className="w-full h-full">
          <Tabs
             variant="underlined"
             classNames={{
@@ -34,7 +34,7 @@ function TransactionTableWithTabs() {
                      </div>
                      <Table
                         classNames={{
-                           th: " bg-purple-500/80 text-white", // Change this to your desired color
+                           th: " bg-purple-500/80 text-white",
                         }}
                      >
                         <TableHeader className="custom-header">

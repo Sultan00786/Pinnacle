@@ -5,7 +5,7 @@ import React from "react";
 function BankCard({ name, amount }: { name: string; amount: number }) {
    return (
       <div>
-         <Card shadow="none" className="bg-purple-100/50 p-2">
+         <Card shadow="none" className={`bg-purple-100/50 p-2`}>
             <CardBody>
                <div className="flex gap-3">
                   <div>
