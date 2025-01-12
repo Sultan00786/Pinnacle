@@ -10,7 +10,9 @@ import {
    Search,
    LogOut,
 } from "lucide-react";
-import { Avatar, User } from "@nextui-org/react";
+import { Avatar, Button, Modal, ModalContent, User } from "@nextui-org/react";
+import { Button as Button2 } from "@repo/ui/component";
+import { signOut, useSession } from "next-auth/react";
 
 const navigation = [
    { name: "Home", href: "/dashboard", icon: HomeIcon },
@@ -32,6 +34,12 @@ function SideBar() {
    const pathname = usePathname();
    const router = useRouter();
    const [navList, setNavList] = useState("");
+   const [isModal, setIsModal] = useState(false);
+   const session = useSession();
+
+   if (!session.data?.user) {
+      router.push("/login");
+   }
    return (
       <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r">
          <nav className="flex-1 space-y-1 px-2 py-4">
@@ -97,10 +105,33 @@ function SideBar() {
                </div> */}
                <User name="Sultan" description="john@example.com" />
                <button className="p-2 hover:bg-purple-400 hover:text-white rounded-md text-muted-foreground hover:text-foreground transition-colors">
-                  <LogOut className="h-5 w-5" />
+                  <LogOut
+                     className="h-5 w-5"
+                     onClick={() => setIsModal(true)}
+                  />
                </button>
             </div>
          </div>
+         <Modal isOpen={isModal} size="sm" onClose={() => setIsModal(false)}>
+            <ModalContent>
+               <div className="p-4">
+                  <h1 className="text-2xl font text-purple-800 font-bold">
+                     Sure, you to LogOut ??
+                  </h1>
+                  <div>
+                     <div className="flex justify-end gap-2 mt-4">
+                        <Button2 onClick={() => signOut()}>Yes</Button2>
+                        <Button2
+                           variant="Secondary"
+                           onClick={() => setIsModal(false)}
+                        >
+                           no
+                        </Button2>
+                     </div>
+                  </div>
+               </div>
+            </ModalContent>
+         </Modal>
       </div>
    );
 }

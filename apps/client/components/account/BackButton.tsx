@@ -4,14 +4,11 @@ import Image from "next/image";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-function BackButton({ step }: { step: 1 | 2 }) {
+function BackButton({ step }: { step: number }) {
    const dispatch = useDispatch();
    return (
       <div>
-         <Button
-            variant="Secondary"
-            onClick={() => dispatch(setStep(step))}
-         >
+         <Button variant="Secondary" onClick={() => dispatch(setStep(step))}>
             <div className="flex gap-[2px] items-center justify-center">
                <Image
                   src={

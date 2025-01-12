@@ -1,8 +1,5 @@
 "use client";
-import {
-   AddCardInputProps,
-   RootState,
-} from "@repo/interface/interface";
+import { AddCardInputProps, RootState } from "@repo/interface/interface";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -16,11 +13,9 @@ import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
 import { toast, ToastContentProps } from "react-toastify";
 import Msg from "../toast/MsgCard";
 
-export default function AddCardForm() {
+export default function AddCardForm({ isBackButton = true }) {
    const router = useRouter();
-   const { user } = useSelector(
-      (state: RootState) => state.auth
-   );
+   const { user } = useSelector((state: RootState) => state.auth);
    const dispatch = useDispatch();
    const [expiryDate, setExpiryDate] = useState({
       month: "",
@@ -33,15 +28,12 @@ export default function AddCardForm() {
       formState: { errors, isSubmitSuccessful },
    } = useForm<AddCardInputProps>();
 
-   const onSubmit: SubmitHandler<AddCardInputProps> = async (
-      data
-   ) => {
+   const onSubmit: SubmitHandler<AddCardInputProps> = async (data) => {
       const toadLoaing = toast.loading("Please wait");
       const response = await isAccountPressent(data.cardNumber);
       if (response.success) {
          toast.update(toadLoaing, {
-            render:
-               "This card is aready present, Enter different Card Number",
+            render: "This card is aready present, Enter different Card Number",
             type: "error",
             isLoading: false,
             autoClose: 6000,
@@ -78,9 +70,7 @@ export default function AddCardForm() {
 
    return (
       <div>
-         <h1 className="text-4xl font-bold mb-2">
-            Add New Card
-         </h1>
+         <h1 className="text-4xl font-bold mb-2">Add New Card</h1>
          <p className="text-gray-500 mb-6">
             Securely add a new payment card to your account.
          </p>
@@ -120,10 +110,10 @@ export default function AddCardForm() {
                minLength={16}
             />
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-end">
                <ExpiryDateInput setExpiryDate={setExpiryDate} />
 
-               <div className=" w-[100px]">
+               <div className=" w-[100px] -mb-3">
                   <Input
                      label="CVV"
                      placeholder="ex: 123"
@@ -139,13 +129,10 @@ export default function AddCardForm() {
 
             <div id="recaptcha-div"></div>
 
-            <Button
-               type="submit"
-               onClick={handleSubmit(onSubmit)}
-            >
+            <Button type="submit" onClick={handleSubmit(onSubmit)}>
                Next
             </Button>
-            <BackButton step={1} />
+            {isBackButton && <BackButton step={1} />}
          </form>
       </div>
    );
@@ -205,5 +192,3 @@ function ExpiryDateInput({
       </div>
    );
 }
-
-
