@@ -49,6 +49,7 @@ export default function LoginForm() {
       if (response?.status === 200) {
          toast.dismiss(toastId);
          router.push("/dashboard");
+         toast.success("Login successful ✨");
       }
       if (response?.error) {
          toast.update(toastId, {

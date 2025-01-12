@@ -14,13 +14,13 @@ import AtmCardComponent from "../account/AtmCardComponent";
 
 function UserDetail() {
    return (
-      <div className=" h-screen w-[390px] border-l">
+      <div className=" h-screen w-[396px] border-l">
          <div />
          <Image
             alt="Backgroun"
             src={BgCover}
-            width={390}
-            className="h-28 bg-gradient-to-r from-primary/10 to-primary/5 rounded-t-lg"
+            width={395}
+            className="h-28 bg-gradient-to-r from-primary/10 to-primary/5"
          />
          <div className="p-4">
             <div className="flex flex-col items-start -mt-12 mb-4">

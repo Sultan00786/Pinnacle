@@ -32,14 +32,8 @@ const navigation = [
 
 function SideBar() {
    const pathname = usePathname();
-   const router = useRouter();
-   const [navList, setNavList] = useState("");
    const [isModal, setIsModal] = useState(false);
-   const session = useSession();
-
-   if (!session.data?.user) {
-      router.push("/login");
-   }
+   const router = useRouter();
    return (
       <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r">
          <nav className="flex-1 space-y-1 px-2 py-4">
@@ -89,20 +83,6 @@ function SideBar() {
          </nav>
          <div className="border-t p-4">
             <div className="flex items-center gap-3">
-               {/* <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                  <Avatar
-                     name="Sultan"
-                     size="sm"
-                     className="bg-transparent"
-                     isBordered
-                  />
-               </div>
-               <div className="flex flex-col">
-                  <span className="text-sm font-medium">John Doe</span>
-                  <span className="text-xs text-muted-foreground">
-                     john@example.com
-                  </span>
-               </div> */}
                <User name="Sultan" description="john@example.com" />
                <button className="p-2 hover:bg-purple-400 hover:text-white rounded-md text-muted-foreground hover:text-foreground transition-colors">
                   <LogOut

@@ -110,12 +110,14 @@ export default function AddCardForm({ isBackButton = true }) {
                minLength={16}
             />
 
-            <div className="flex gap-4 items-end">
+            <div className="flex gap-4 items-start">
                <ExpiryDateInput setExpiryDate={setExpiryDate} />
 
-               <div className=" w-[100px] -mb-3">
+               <div className=" w-[110px]">
+                  <label className="text-lg font-medium text-gray-700 ">
+                     CVV
+                  </label>
                   <Input
-                     label="CVV"
                      placeholder="ex: 123"
                      id="cvv"
                      type="number"
@@ -127,7 +129,7 @@ export default function AddCardForm({ isBackButton = true }) {
                </div>
             </div>
 
-            <div id="recaptcha-div"></div>
+            <div id="recaptcha-div" className="p-2"></div>
 
             <Button type="submit" onClick={handleSubmit(onSubmit)}>
                Next
@@ -151,7 +153,7 @@ function ExpiryDateInput({
    setExpiryDate: SetFormDataType;
 }) {
    return (
-      <div>
+      <div className=" h-full">
          <label
             htmlFor="expiryDate"
             className="block text-lg font-medium text-gray-700"
@@ -164,7 +166,7 @@ function ExpiryDateInput({
                name="expiryDate"
                id="expiryDate"
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
-               placeholder="mm"
+               placeholder="MM"
                onChange={(e) => {
                   setExpiryDate((prev) => ({
                      ...prev,
@@ -180,7 +182,7 @@ function ExpiryDateInput({
                name="expiryDate"
                id="expiryDate"
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
-               placeholder="yy"
+               placeholder="YY"
                onChange={(e) => {
                   setExpiryDate((prev) => ({
                      ...prev,
