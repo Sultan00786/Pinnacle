@@ -1,10 +1,8 @@
 "use client";
-import React, { Suspense } from "react";
+import { DashboardHeadline, PurbleButton } from "@repo/ui/component";
+import { Suspense } from "react";
 import ChartCard from "../../../components/chart/ChartCard";
 import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
-import { Button } from "@nextui-org/react";
-import { DashboardHeadline, PurbleButton } from "@repo/ui/component";
-import { Building2, PlusCircle } from "lucide-react";
 import UserDetail from "../../../components/user/UserDetail";
 import RootLaoding from "../../loading";
 
