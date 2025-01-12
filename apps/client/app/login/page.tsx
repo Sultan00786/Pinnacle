@@ -1,7 +1,16 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import AuthComponent from "../../components/auth/AuthComponent";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function page() {
+   const router = useRouter();
+   const session = useSession();
+   console.log(session);
+   if (session?.data?.user) {
+      router.push("/dashboard");
+   }
    return <AuthComponent authType="login" />;
 }
 

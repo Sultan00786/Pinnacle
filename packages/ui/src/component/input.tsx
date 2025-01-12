@@ -48,14 +48,12 @@ function Input<T extends FieldValues>({
             return "This field is too short.";
 
          case "pattern":
-            if (fieldType === "email")
-               return "Please enter a valid email.";
+            if (fieldType === "email") return "Please enter a valid email.";
 
             if (fieldType === "password")
                return "Password must be at least 8 characters, include uppercase, lowercase, and a number.";
 
-            if (fieldType === "number")
-               return "Please enter valid numbers.";
+            if (fieldType === "number") return "Please enter valid numbers.";
 
             if (fieldType === "date") return null;
 
@@ -69,7 +67,7 @@ function Input<T extends FieldValues>({
          {label && (
             <label
                htmlFor={id as string}
-               className="block text-sm font-medium text-gray-700"
+               className="block text-sm font-medium text-gray-700 mb-1"
             >
                {label}
             </label>

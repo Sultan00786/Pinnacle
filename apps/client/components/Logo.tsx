@@ -19,7 +19,7 @@ function Logo() {
             className=" absolute bottom-[5px] left-0"
          />
          <h1
-            className={`${kaint.className} ml-8 text-3xl font-bold text-sky-900`}
+            className={`${kaint.className} ml-8 text-3xl font-bold text-purple-600`}
          >
             innacle
          </h1>

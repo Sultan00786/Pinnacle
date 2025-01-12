@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { prisma } from "@repo/db/client";
 
 export async function isUserPresent(email: string) {
@@ -11,13 +11,13 @@ export async function isUserPresent(email: string) {
 
       if (user?.id) {
          return {
-            success: false,
+            success: true,
             message: "User is Present",
          };
       }
       return {
-         success: true,
-         message: "User is not Present",
+         success: false,
+         message: "User is not Present. Please Sign-up",
       };
    } catch (error) {
       console.log(error);

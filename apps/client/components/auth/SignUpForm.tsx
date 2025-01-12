@@ -23,7 +23,7 @@ export default function SignUpForm() {
    ) => {
       const toatId = toast.loading("Please wait");
       const response = await isUserPresent(data.email);
-      if (!response.success) {
+      if (response.success) {
          toast.update(toatId, {
             render:
                "This email is aready present, Enter different email",

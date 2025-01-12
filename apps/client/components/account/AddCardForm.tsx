@@ -1,8 +1,5 @@
 "use client";
-import {
-   AddCardInputProps,
-   RootState,
-} from "@repo/interface/interface";
+import { AddCardInputProps, RootState } from "@repo/interface/interface";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -16,11 +13,9 @@ import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
 import { toast, ToastContentProps } from "react-toastify";
 import Msg from "../toast/MsgCard";
 
-export default function AddCardForm() {
+export default function AddCardForm({ isBackButton = true }) {
    const router = useRouter();
-   const { user } = useSelector(
-      (state: RootState) => state.auth
-   );
+   const { user } = useSelector((state: RootState) => state.auth);
    const dispatch = useDispatch();
    const [expiryDate, setExpiryDate] = useState({
       month: "",
@@ -33,20 +28,16 @@ export default function AddCardForm() {
       formState: { errors, isSubmitSuccessful },
    } = useForm<AddCardInputProps>();
 
-   const onSubmit: SubmitHandler<AddCardInputProps> = async (
-      data
-   ) => {
+   const onSubmit: SubmitHandler<AddCardInputProps> = async (data) => {
       const toadLoaing = toast.loading("Please wait");
       const response = await isAccountPressent(data.cardNumber);
-      if (!response.success) {
+      if (response.success) {
          toast.update(toadLoaing, {
-            render:
-               "This card is aready present, Enter different Card Number",
+            render: "This card is aready present, Enter different Card Number",
             type: "error",
             isLoading: false,
             autoClose: 6000,
          });
-         toast.dismiss(toadLoaing);
          return;
       }
 
@@ -79,9 +70,7 @@ export default function AddCardForm() {
 
    return (
       <div>
-         <h1 className="text-4xl font-bold mb-2">
-            Add New Card
-         </h1>
+         <h1 className="text-4xl font-bold mb-2">Add New Card</h1>
          <p className="text-gray-500 mb-6">
             Securely add a new payment card to your account.
          </p>
@@ -121,12 +110,14 @@ export default function AddCardForm() {
                minLength={16}
             />
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-start">
                <ExpiryDateInput setExpiryDate={setExpiryDate} />
 
-               <div className=" w-[100px]">
+               <div className=" w-[110px]">
+                  <label className="text-lg font-medium text-gray-700 ">
+                     CVV
+                  </label>
                   <Input
-                     label="CVV"
                      placeholder="ex: 123"
                      id="cvv"
                      type="number"
@@ -138,15 +129,12 @@ export default function AddCardForm() {
                </div>
             </div>
 
-            <div id="recaptcha-div"></div>
+            <div id="recaptcha-div" className="p-2"></div>
 
-            <Button
-               type="submit"
-               onClick={handleSubmit(onSubmit)}
-            >
+            <Button type="submit" onClick={handleSubmit(onSubmit)}>
                Next
             </Button>
-            <BackButton step={1} />
+            {isBackButton && <BackButton step={1} />}
          </form>
       </div>
    );
@@ -165,7 +153,7 @@ function ExpiryDateInput({
    setExpiryDate: SetFormDataType;
 }) {
    return (
-      <div>
+      <div className=" h-full">
          <label
             htmlFor="expiryDate"
             className="block text-lg font-medium text-gray-700"
@@ -178,7 +166,7 @@ function ExpiryDateInput({
                name="expiryDate"
                id="expiryDate"
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
-               placeholder="mm"
+               placeholder="MM"
                onChange={(e) => {
                   setExpiryDate((prev) => ({
                      ...prev,
@@ -194,7 +182,7 @@ function ExpiryDateInput({
                name="expiryDate"
                id="expiryDate"
                className=" w-[55px] p-1 pl-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm sm:text-sm border-2 border-gray-300 rounded-md"
-               placeholder="yy"
+               placeholder="YY"
                onChange={(e) => {
                   setExpiryDate((prev) => ({
                      ...prev,
@@ -206,5 +194,3 @@ function ExpiryDateInput({
       </div>
    );
 }
-
-
