@@ -1,12 +1,9 @@
 import {
-   AddCardInputProps,
-   SignUpIputProps,
+   AddCardInputProps
 } from "@repo/interface/interface";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 import { createAccount } from "../app/lib/action/createAccount";
-import { getSession, signIn } from "next-auth/react";
-import { getServerSession, Session } from "next-auth";
-import { authOption } from "./nextAuth";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface CustomUser {
    id: string;
@@ -36,6 +33,14 @@ export async function nextAuthSignUp(
          year: account.year,
          phone: account.phone,
       });
+
+      if (!createAccountRes.success) {
+         return {
+            status: false,
+            message: createAccountRes.message,
+         };
+      }
+
       return {
          status: true,
       };
