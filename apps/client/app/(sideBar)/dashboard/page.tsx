@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import ChartCard from "../../../components/chart/ChartCard";
 import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
 import { Button } from "@nextui-org/react";
-import { PurbleButton } from "@repo/ui/component";
+import { DashboardHeadline, PurbleButton } from "@repo/ui/component";
 import { Building2, PlusCircle } from "lucide-react";
 import UserDetail from "../../../components/user/UserDetail";
 import RootLaoding from "../../loading";
@@ -12,14 +12,14 @@ function Dashboard() {
    return (
       <div className="flex ">
          <div className="w-[900px] h-full flex flex-col px-6 gap-6">
-            <div className=" flex flex-col gap-1 mt-10">
-               <h1 className=" font-bold text-3xl">
-                  Welcom, <span className=" text-purple-700">Sultan</span>
-               </h1>
-               <p className=" text-gray-500">
-                  Access & manage your account and transactions efficiently.
-               </p>
-            </div>
+            <DashboardHeadline
+               children={
+                  <div>
+                     Welcom, <span className=" text-purple-700">Sultan</span>
+                  </div>
+               }
+               para="Access & manage your account and transactions efficiently."
+            />
             <ChartCard />
             <div className=" w-full">
                <div className=" flex justify-between">
