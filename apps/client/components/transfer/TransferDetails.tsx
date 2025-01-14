@@ -151,7 +151,7 @@ function TransferDetails() {
                      />
                   </div>
                </div>
-               <div className=" w-full pr-[400]">
+               <div className=" w-full pr-[400] -mt-3">
                   <Button>Transfer Money</Button>
                </div>
             </div>
