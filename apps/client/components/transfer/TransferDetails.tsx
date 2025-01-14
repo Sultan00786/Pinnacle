@@ -5,6 +5,9 @@ import { CreditCardIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import SelectBankSource from "../SelectBankSource";
+import { sources } from "next/dist/compiled/webpack/webpack";
+import p2pTransaction, { P2Ptype } from "../../app/lib/action/p2pTransaction";
+import { toast } from "react-toastify";
 
 const data = [
    "Pinnacle Bank",
@@ -17,7 +20,7 @@ const data = [
 
 interface TransferDetail {
    email: string;
-   accountNumber: number;
+   accountNumber: string;
    amount: number;
 }
 
@@ -34,6 +37,36 @@ function TransferDetails() {
       handleSubmit,
       formState: { errors },
    } = useForm<TransferDetail>();
+
+   async function onSubmit(data: TransferDetail) {
+      const toastId = toast.loading("Please wait...");
+      const combine = {
+         email: data.email,
+         accountNumber: data.accountNumber,
+         amount: Number(data.amount * 100),
+         source: selectSource,
+      };
+      console.log(combine);
+      const response = await p2pTransaction(combine);
+      if (!response.success) {
+         console.log(response.error)
+         toast.update(toastId, {
+            render: `${response.error}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 5000,
+         });
+         return
+      }
+      console.log(response);
+      toast.update(toastId, {
+         render: "Transaction Successful",
+         type: "success",
+         isLoading: false,
+         autoClose: 5000,
+      });
+   }
+
    return (
       <div className="w-full">
          <form className=" w-full">
@@ -52,26 +85,6 @@ function TransferDetails() {
                      </p>
                   </div>
                   <div className=" w-full pr-[400px]">
-                     <Select
-                        variant="bordered"
-                        label={
-                           <div className=" flex gap-2 items-center text-gray-600">
-                              <CreditCardIcon className=" text-purple-500 " />
-                              <p>Select Source of Account</p>
-                           </div>
-                        }
-                        labelPlacement="outside"
-                     >
-                        {data.map((item) => (
-                           <SelectItem
-                              onSelect={() => setSelectSource(item)}
-                              key={item}
-                              value={item}
-                           >
-                              {item}
-                           </SelectItem>
-                        ))}
-                     </Select>
                      <SelectBankSource setSelectSource={setSelectSource} />
                   </div>
                </div>
@@ -155,7 +168,9 @@ function TransferDetails() {
                   </div>
                </div>
                <div className=" w-full pr-[400] -mt-3">
-                  <Button>Transfer Money</Button>
+                  <Button type="submit" onClick={handleSubmit(onSubmit)}>
+                     Transfer Money
+                  </Button>
                </div>
             </div>
          </form>

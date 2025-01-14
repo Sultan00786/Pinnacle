@@ -2,11 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
-import {
-   FieldValues,
-   SubmitHandler,
-   useForm,
-} from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LoginInputProps } from "@repo/interface/interface";
 import { isUserPresent } from "../../app/lib/action/isUserPresent";
 import { isFloat64Array } from "node:util/types";
@@ -22,9 +18,7 @@ export default function LoginForm() {
 
    const router = useRouter();
 
-   const onSubmit: SubmitHandler<LoginInputProps> = async (
-      data
-   ) => {
+   const onSubmit: SubmitHandler<LoginInputProps> = async (data) => {
       const toastId = toast.loading("Please wait");
       const presentRes = await isUserPresent(data.email);
       if (!presentRes.success) {
@@ -87,22 +81,17 @@ export default function LoginForm() {
                errors={errors}
                register={register}
                // password pattern for validatio special char, number, upper and lower case
-               pattern={
-                  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
-               }
+               pattern={/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/}
             />
 
-            <Button
-               type="submit"
-               onClick={handleSubmit(onSubmit)}
-            >
+            <Button type="submit" onClick={handleSubmit(onSubmit)}>
                Login
             </Button>
             <p className="text-center text-gray-600 mt-4">
                Don't have an account?{" "}
                <span
                   onClick={() => router.push("/signup")}
-                  className="text-sky-700 font-semibold cursor-pointer transition-all duration-150 hover:text-sky-900"
+                  className="text-purple-500 font-semibold cursor-pointer transition-all duration-150 hover:text-purple-700"
                >
                   Sign up
                </span>

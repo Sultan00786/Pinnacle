@@ -21,11 +21,12 @@ model User {
   lastName       String
   address        String
   state          String
+  totalBalance   Int        @default(0)
   dateOfBirth    DateTime
-  createdAt      DateTime  @default(now())
+  createdAt      DateTime   @default(now())
   accounts       Account[]
-  recieveFrom    Transaction[] @relation(name: "Recieve")
-  sendTo         Transaction[] @relation(name: "Send")
+  send           Transaction[] @relation(name: "Recieve")
+  recieve        Transaction[] @relation(name: "Send")
 }
 
 model Account {
@@ -54,7 +55,7 @@ model Transaction {
   reciever            User      @relation(name: "Send", fields: [to], references: [id])
 }
 
-enum TransactionCategory {
+ enum TransactionCategory {
   Income
   Deposit
   Subscirptions
