@@ -19,6 +19,7 @@ type AddCardInputProps = {
    cardNumber: string;
    cardHolder: string;
    phone: string;
+   source:string;
    month: string;
    year: string;
    cvv: string;

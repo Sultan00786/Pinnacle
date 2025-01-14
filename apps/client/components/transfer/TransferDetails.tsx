@@ -4,6 +4,7 @@ import { Button, Input } from "@repo/ui/component";
 import { CreditCardIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import SelectBankSource from "../SelectBankSource";
 
 const data = [
    "Pinnacle Bank",
@@ -71,13 +72,15 @@ function TransferDetails() {
                            </SelectItem>
                         ))}
                      </Select>
+                     <SelectBankSource setSelectSource={setSelectSource} />
                   </div>
                </div>
                <div className=" w-full flex gap-8 py-3 border-b">
                   <div className="w-1/2">
                      <p className="text-gray-600">Transfer Note (Optional)</p>
                      <p className="text-gray-400 text-sm">
-                        Select the bank account you want to ransfer funds from
+                        Please provide any additional information or
+                        instructions related to the transfer
                      </p>
                   </div>
                   <div className=" w-full pr-[400px]">

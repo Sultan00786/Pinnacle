@@ -93,6 +93,7 @@ export default function OtpVerify({isSignUp = true}) {
    };
 
    useEffect(() => {
+      console.log(account?.source)
       const toastId = "otp-instruction";
       if (!toast.isActive(toastId)) {
          toast(MsgOtp, {

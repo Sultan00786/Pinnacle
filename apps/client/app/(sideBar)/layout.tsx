@@ -33,7 +33,6 @@ const tabs = [
 export default function SideBarLayout({ children }: { children: ReactNode }) {
    const session = useSession();
    const router = useRouter();
-   console.log(session);
 
    useEffect(() => {
       if (!session?.data?.user) {
