@@ -1,8 +1,7 @@
 "use server";
-import { getServerSession } from "next-auth";
-import React from "react";
-import { authOption } from "../../../lib/nextAuth";
 import { prisma } from "@repo/db/client";
+import { getServerSession } from "next-auth";
+import { authOption } from "../../../lib/nextAuth";
 
 enum CategoryP2P {
    Income,
@@ -27,23 +26,29 @@ export default async function p2pTransaction({
 }: P2Ptype) {
    try {
       if (!email || !accountNumber || !amount || !source) {
-         throw new Error("Please provide all the details");
+         return {
+            success: false,
+            error: "Please provide all the details",
+            message: "Transaction fail !!",
+         };
       }
 
       const session = await getServerSession(authOption);
       const fromUserId = Number(session?.user?.id);
       if (isNaN(fromUserId)) {
-         throw new Error("Invalid User ID");
-       }
-      if (!session?.user?.id) {
-         throw new Error("Please Login");
+         return {
+            success: false,
+            error: "Please Login",
+            message: "Transaction fail !!",
+         };
       }
-
-      console.log(
-         "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-      );
-
-      console.log(fromUserId);
+      if (!session?.user?.id) {
+         return {
+            success: false,
+            error: "Please Login",
+            message: "Transaction fail !!",
+         };
+      }
 
       const toUser = await prisma.user.findFirst({
          where: {
@@ -53,7 +58,11 @@ export default async function p2pTransaction({
 
       const toUserId = toUser?.id;
       if (!toUserId) {
-         throw new Error("Sender User not found");
+         return {
+            success: false,
+            error: "Recipient user not found",
+            message: "Transaction fail !!",
+         };
       }
       const toUserAccount = await prisma.account.findFirst({
          where: {
@@ -62,45 +71,82 @@ export default async function p2pTransaction({
          },
       });
       if (!toUserAccount) {
-         throw new Error("Sender Account not found");
+         return {
+            success: false,
+            error: "Recipient Account not found",
+            message: "Transaction fail !!",
+         };
       }
       if (toUserAccount?.source !== source) {
-         throw new Error("Provide Sender Account source");
+         return {
+            success: false,
+            error: "Provide Recipient Account source",
+            message: "Transaction fail !!",
+         };
       }
 
       const fromUser = await prisma.user.findFirst({
          where: {
             id: fromUserId,
          },
+         select: {
+            id: true,
+            totalBalance: true,
+            accounts: true,
+         }
       });
 
-      console.log(fromUser)
-
       if (!fromUser) {
-         throw new Error("Login User not found");
+         return {
+            success: false,
+            error: "Login User not found",
+            message: "Transaction fail !!",
+         };
       }
       if (fromUser.totalBalance < amount) {
-         throw new Error("Insufficient Balance");
+         return {
+            success: false,
+            error: "Insufficient Balance",
+            message: "Transaction fail !!",
+         };
       }
 
-      const transaction = await prisma.$transaction(async (txs) => {
-         await txs.$queryRaw`SELECT * FROM "Account" WHERE "userId" = ${fromUserId} FOR UPDATE`;
+      await prisma.$transaction(async (txs) => {
+         // reducing balance from multiple accounts of login user
+         let remainingAmount = amount;
+         let i = 0;
 
-         await txs.account.update({
-            where: {
-               accountNo: accountNumber,
-            },
-            data: {
-               balance: {
-                  //  decrement: amount*100,
-                  decrement: amount,
-               },
-            },
-         });
+         while (remainingAmount > 0 && i < fromUser.accounts.length) {
+            const account = fromUser.accounts[i];
+            if (!account) {
+               continue;
+            }
+
+            await txs.$queryRaw`SELECT * FROM "Account" WHERE "userId" = ${account.id} FOR UPDATE`;
+            if (account.balance >= remainingAmount) {
+               await txs.account.update({
+                  where: { id: account.id },
+                  data: {
+                     balance: {
+                        decrement: remainingAmount,
+                     },
+                  },
+               });
+               remainingAmount = 0;
+            } else {
+               await txs.account.update({
+                  where: { id: account.id },
+                  data: {
+                     balance: 0,
+                  },
+               });
+               remainingAmount -= account.balance;
+            }
+            i++;
+         }
 
          await txs.$queryRaw`SELECT * FROM "Account" WHERE "userId" = ${toUserId} FOR UPDATE`;
-
-         await txs.account.update({
+         await txs.account.updateMany({
             where: {
                accountNo: accountNumber,
             },
@@ -112,8 +158,8 @@ export default async function p2pTransaction({
             },
          });
 
-         await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${fromUserId} FOR UPDATE`;
-         await txs.user.update({
+         await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${fromUser.id} FOR UPDATE`;
+         const formUserRes = await txs.user.update({
             where: {
                id: fromUserId,
             },
@@ -124,9 +170,16 @@ export default async function p2pTransaction({
                },
             },
          });
+         if (!formUserRes) {
+            return {
+               success: false,
+               error: "From Account not found !!",
+               message: "Transaction fails !!",
+            };
+         }
 
-         await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${toUserId} FOR UPDATE`;
-         await txs.user.update({
+         await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${toUser.id} FOR UPDATE`;
+         const toUserres = await txs.user.update({
             where: {
                id: toUserId,
             },
@@ -137,9 +190,16 @@ export default async function p2pTransaction({
                },
             },
          });
+         if (!toUserres) {
+            return {
+               success: false,
+               error: "To Account not found !!",
+               message: "Transaction fails !!",
+            };
+         }
 
          const randomNum = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-         await txs.transaction.create({
+         const transactionRes = await txs.transaction.create({
             data: {
                amount: amount,
                from: fromUser.id,
@@ -153,6 +213,14 @@ export default async function p2pTransaction({
                status: "Processing",
             },
          });
+
+         if (!transactionRes) {
+            return {
+               success: false,
+               error: "Transaction not created !!",
+               message: "Transaction fails !!",
+            };
+         }
       });
 
       return {
