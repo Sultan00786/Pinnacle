@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DoughnutChart from "./DoughnutChart";
 import { Plus } from "lucide-react";
 
 function ChartCard() {
+
+   useEffect(() => {
+      console.log("ChartCard mounted");
+   }, []);
+
    return (
       <div className=" flex items-center gap-5 p-5 border border-gray-300 rounded-xl w-full shadow-md ">
          <div className=" w-[130px] ">

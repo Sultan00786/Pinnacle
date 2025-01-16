@@ -210,7 +210,7 @@ export default async function p2pTransaction({
                      : randomNum === 2
                        ? "Groceries"
                        : "Subscirptions",
-               status: "Processing",
+               status: "Success",
             },
          });
 
