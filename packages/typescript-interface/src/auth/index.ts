@@ -39,10 +39,39 @@ interface ButtonProps {
    onClick?: () => void;
 }
 
+interface UserType{
+   id: number;
+   email: string;
+   password: string;
+   firstName: string;
+   lastName: string;
+   address: string;
+   state: string;
+   totalBalance: number;
+   dateOfBirth: Date;
+   createdAt: Date;
+   accounts: AccountType[];
+};
+
+interface AccountType{
+   id: number;
+   createdAt: Date;
+   accountNo: string;
+   balance: number;
+   phone: string;
+   expiryDate: string;
+   cvv: number;
+   source: string;
+   userId: number;
+   accountHolder: string;
+}
+
 export type {
    LoginInputProps,
    SignUpIputProps,
    AddCardInputProps,
    InputFileType,
    ButtonProps,
+   UserType,
+   AccountType
 };
