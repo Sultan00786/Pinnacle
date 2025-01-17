@@ -3,9 +3,9 @@ import { getServerSession } from "next-auth";
 import React from "react";
 import { authOption } from "../../../lib/nextAuth";
 import { prisma } from "@repo/db/client";
-import { TransactionType } from "@repo/interface/interface"
+import { TransactionType } from "@repo/interface/interface";
 
-export default async function getTransaction() {
+export default async function getTransaction(isFull: Boolean = false) {
    try {
       const session = await getServerSession(authOption);
       if (!session?.user?.id)
@@ -15,25 +15,27 @@ export default async function getTransaction() {
          };
       const userId = Number(session?.user?.id);
 
-      const transactions:TransactionType[] = await prisma.transaction.findMany({
-         where: {
-            from: userId,
-         },
-         orderBy: { date: "desc" },
-         select: {
-            id: true,
-            amount: true,
-            date: true,
-            category: true,
-            status: true,
-            reciever: {
-               select: {
-                  firstName: true,
-                  lastName: true,
+      const transactions: TransactionType[] = await prisma.transaction.findMany(
+         {
+            where: {
+               from: userId,
+            },
+            orderBy: { date: "desc" },
+            select: {
+               id: true,
+               amount: true,
+               date: true,
+               category: true,
+               status: true,
+               reciever: {
+                  select: {
+                     firstName: true,
+                     lastName: true,
+                  },
                },
             },
          }
-      });
+      );
 
       if (!transactions || transactions.length === 0)
          return {
@@ -44,10 +46,9 @@ export default async function getTransaction() {
       return {
          success: true,
          message: "Transaction found",
-         transactions:
-            transactions.length > 4 ? transactions.slice(0, 4) : transactions,
+         transactions: !isFull ? transactions.slice(0, 4) : transactions,
       };
-   } catch (error) { 
+   } catch (error) {
       console.error(error);
       return {
          success: false,

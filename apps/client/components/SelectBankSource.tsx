@@ -13,24 +13,33 @@ const data = [
 
 function SelectBankSource({
    setSelectSource,
+   selectData = data,
+   children = (
+      <div className="className= w-fit flex gap-2 items-center text-gray-600">
+         <CreditCardIcon className=" text-purple-500 " />
+         <p>Select Source of Account</p>
+      </div>
+   ),
+   defaultValue = "All",
 }: {
    setSelectSource: (value: React.SetStateAction<string>) => void;
+   selectData?: { id: string; name: string }[];
+   children?: React.ReactNode;
+   defaultValue?: string;
 }) {
    return (
       <div>
          <Select
+            defaultSelectedKeys={[defaultValue]}
             variant="bordered"
-            items={data}
-            label={
-               <div className="w-fit flex gap-2 items-center text-gray-600">
-                  <CreditCardIcon className=" text-purple-500 " />
-                  <p>Select Source of Account</p>
-               </div>
-            }
+            items={selectData}
+            label={children}
             labelPlacement="outside"
-            onSelectionChange={(value) => setSelectSource(value.currentKey as string)}
+            onSelectionChange={(value) =>
+               setSelectSource(value.currentKey as string)
+            }
          >
-            {data.map((item) => (
+            {selectData.map((item) => (
                <SelectItem
                   onChange={(e) => setSelectSource(item.name)}
                   key={item.name}
