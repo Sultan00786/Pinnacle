@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import React from "react";
 import { authOption } from "../../../lib/nextAuth";
 import { prisma } from "@repo/db/client";
-import { TransactionType } from "@repo/interface/interface";
+import { TransactionType } from "@repo/interface/interface"
 
 export default async function getTransaction() {
    try {

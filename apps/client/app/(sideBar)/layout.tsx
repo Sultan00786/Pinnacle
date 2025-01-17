@@ -35,11 +35,11 @@ export default function SideBarLayout({ children }: { children: ReactNode }) {
    const router = useRouter();
    const path = usePathname();
 
-   if (session?.data?.user) {
-      router.push(`${path}`);
-   } else {
-      router.push("/login");
-   }
+   // if (session?.data?.user) {
+   //    router.push(`${path}`);
+   // } else {
+   //    router.push("/login");
+   // }
    return (
       <div className="flex w-screen">
          <SideBar />

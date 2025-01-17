@@ -7,7 +7,15 @@ export const fuctionTxs = async (
    setTableData: React.Dispatch<React.SetStateAction<TransactionType[]>>
 ) => {
    setLoading(true);
-   const toastId = toast.loading("Please wait...");
+   const toastId = "loading";
+   toast.loading("Fetching Transaction History", {
+      toastId: toastId,
+   });
+   // if(!toast.isActive) {
+   //    toast.loading("Fetching Transaction History", {
+   //       toastId: toastId,
+   //    });
+   // }
    console.log("hellow ");
    const txs = await getTransaction();
    console.log(txs);
@@ -17,7 +25,14 @@ export const fuctionTxs = async (
          render: "Transaction History",
          type: "success",
          isLoading: false,
-         autoClose: 6000,
+         autoClose: 3000,
+      });
+   } else {
+      toast.update(toastId, {
+         render: txs.message,
+         type: "error",
+         isLoading: false,
+         autoClose: 2000,
       });
    }
    setLoading(false);
