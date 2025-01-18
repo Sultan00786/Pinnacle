@@ -1,13 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import TableComponent from "../../../components/transaction/TableComponent";
-import getTransaction from "../../lib/support/getTransaction";
-import { toast } from "react-toastify";
 import { TransactionType } from "@repo/interface/interface";
 import { DashboardHeadline, Loader } from "@repo/ui/component";
-import { fuctionTxs } from "../../../lib/fetchTransaction";
+import { ListFilter } from "lucide-react";
+import { useEffect, useState } from "react";
 import SelectBankSource from "../../../components/SelectBankSource";
-import { Filter, FilterIcon, ListFilter } from "lucide-react";
+import TableComponent from "../../../components/transaction/TableComponent";
+import { fuctionTxs } from "../../../lib/fetchTransaction";
 
 const data = [
    { id: "0", name: "All" },
@@ -21,14 +19,16 @@ function TransactionHistrory() {
    const [tableData, setTableData] = useState<TransactionType[]>(
       [] as TransactionType[]
    );
-   const [select, setSelect] = useState("");
+   const [select, setSelect] = useState("All");
+
+   async function func() {
+      setLoading(true);
+      await fuctionTxs(setTableData, true, select);
+      setLoading(false);
+   }
 
    useEffect(() => {
-      fuctionTxs(setLoading, setTableData, true);
-   }, []);
-
-   useEffect(() => {
-      fuctionTxs(setLoading, setTableData, true, select);
+      func();
    }, [select]);
 
    if (loading) {

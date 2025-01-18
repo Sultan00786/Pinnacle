@@ -1,17 +1,17 @@
 "use client";
-import { DashboardHeadline, Loader, PurbleButton } from "@repo/ui/component";
-import { Suspense, use, useEffect, useState } from "react";
-import ChartCard from "../../../components/chart/ChartCard";
-import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
-import UserDetail from "../../../components/user/UserDetail";
-import RootLaoding from "../../loading";
 import {
    AccountType,
    TransactionType,
    UserType,
 } from "@repo/interface/interface";
+import { DashboardHeadline, Loader, PurbleButton } from "@repo/ui/component";
+import { Suspense, useEffect, useState } from "react";
+import ChartCard from "../../../components/chart/ChartCard";
+import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
+import UserDetail from "../../../components/user/UserDetail";
 import { fuctionTxs } from "../../../lib/fetchTransaction";
 import getUserDetails from "../../lib/support/getUserDetails";
+import RootLaoding from "../../loading";
 
 function Dashboard() {
    const [loading, setLoading] = useState(false);
@@ -21,20 +21,19 @@ function Dashboard() {
    const [user, setUser] = useState<UserType>({} as UserType);
    const [accounts, setAccounts] = useState<AccountType[]>([] as AccountType[]);
 
-   useEffect(() => {
-      fuctionTxs(setLoading, setTableData);
+   async function func() {
       setLoading(true);
-      getUserDetails()
-         .then((res) => {
-            if (res.user) {
-               setUser(res.user);
-               setAccounts(res.user.accounts);
-            }
-         })
-         .catch((err) => {
-            console.log(err);
-         });
+      await fuctionTxs(setTableData);
+      const res = await getUserDetails();
+      if (res.user) {
+         setUser(res.user);
+         setAccounts(res.user.accounts);
+      }
       setLoading(false);
+   }
+
+   useEffect(() => {
+      func();
    }, []);
 
    if (loading) {

@@ -27,6 +27,7 @@ model User {
   accounts       Account[]
   send           Transaction[] @relation(name: "Recieve")
   recieve        Transaction[] @relation(name: "Send")
+  onRampPage     OnRampTransaction[]
 }
 
 model Account {
@@ -53,6 +54,18 @@ model Transaction {
   category            TransactionCategory
   sender              User      @relation(name: "Recieve", fields: [from], references: [id])
   reciever            User      @relation(name: "Send", fields: [to], references: [id])
+}
+
+model OnRampTransaction {
+  id          Int         @id @default(autoincrement())
+  status      TransactionStatus
+  token       String      @unique
+  provider    String
+  amount      Int
+  startTime   DateTime 
+  userId      Int
+  receiveAcc  String
+  user        User        @relation(fields: [userId], references: [id])
 }
 
  enum TransactionCategory {

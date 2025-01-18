@@ -1,8 +1,7 @@
 "use client";
-import React, { HTMLAttributes } from "react";
-import masterCardimg from "../../../client/public/masterCardimg.png";
-import Image from "next/image";
 import { AccountType } from "@repo/interface/interface";
+import Image from "next/image";
+import masterCardimg from "../../../client/public/masterCardimg.png";
 
 function AtmCardComponent({
    className = "",
@@ -14,12 +13,11 @@ function AtmCardComponent({
    return (
       <div>
          <div
-            className={` ${className} relative m-auto h-48 w-80 rounded-xl bg-gradient-to-r from-pink-700 to-purple-400 text-white shadow-lg transition-transform sm:h-56 sm:w-96 scale-75`}
+            className={` ${className} relative m-auto h-48 w-80 rounded-xl bg-gradient-to-r from-pink-700 to-purple-400 text-white shadow-lg transition-transform sm:h-56 sm:w-96 scale-[0.72]`}
          >
             <div className="absolute top-4 w-full px-8 sm:top-8">
                <div className="flex justify-between">
-                  <div className="">
-                     <p className="font-light">Name</p>
+                  <div className="flex gap-2">
                      <p className="font-medium tracking-widest">
                         {account.accountHolder}
                      </p>
@@ -32,7 +30,7 @@ function AtmCardComponent({
                   />
                </div>
                <div className="pt-1">
-                  <p className="font-light">Card Number</p>
+                  <p className="font-light">Card No.</p>
                   <p className="tracking-more-wider font-medium">
                      4312 567 7890 7864
                   </p>
@@ -55,7 +53,7 @@ function AtmCardComponent({
                      <div className="">
                         <p className="text-xs font-light">CVV</p>
                         <p className="tracking-more-wider text-sm font-bold">
-                           521
+                           {account.cvv}
                         </p>
                      </div>
                   </div>
