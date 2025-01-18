@@ -1,13 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button, Input } from "@repo/ui/component";
-import { useRouter } from "next/navigation";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { LoginInputProps } from "@repo/interface/interface";
-import { isUserPresent } from "../../app/lib/action/isUserPresent";
-import { isFloat64Array } from "node:util/types";
-import { signIn, useSession } from "next-auth/react";
+import { Button, Input } from "@repo/ui/component";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { isUserPresent } from "../../app/lib/action/isUserPresent";
 
 export default function LoginForm() {
    const {
@@ -37,8 +35,6 @@ export default function LoginForm() {
          firsName: null,
          redirect: false,
       });
-
-      console.log(response);
 
       if (response?.status === 200) {
          toast.dismiss(toastId);

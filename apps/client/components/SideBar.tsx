@@ -35,7 +35,7 @@ function SideBar() {
    const [isModal, setIsModal] = useState(false);
    const router = useRouter();
    return (
-      <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r">
+      <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r ">
          <nav className="flex-1 space-y-1 px-2 py-4">
             <div className=" flex flex-col gap-4">
                <div className="">

@@ -33,7 +33,6 @@ export default function OtpVerify({isSignUp = true}) {
          toast.success("Account Created ✔✔")
          isSignUp && router.push("/dashboard");
          dispatch(setStep(1))
-         console.log(res);
       }
    }
 
@@ -93,7 +92,6 @@ export default function OtpVerify({isSignUp = true}) {
    };
 
    useEffect(() => {
-      console.log(account?.source)
       const toastId = "otp-instruction";
       if (!toast.isActive(toastId)) {
          toast(MsgOtp, {

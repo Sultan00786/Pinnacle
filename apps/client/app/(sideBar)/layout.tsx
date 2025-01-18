@@ -41,9 +41,9 @@ export default function SideBarLayout({ children }: { children: ReactNode }) {
    //    router.push("/login");
    // }
    return (
-      <div className="flex w-screen">
+      <div className="flex w-screen overflow-y-hidden">
          <SideBar />
-         <div className="w-full">{children}</div>
+         <div className="relative w-full overflow-y-hidden">{children}</div>
       </div>
    );
 }

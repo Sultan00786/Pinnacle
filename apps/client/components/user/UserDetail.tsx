@@ -11,8 +11,15 @@ import {
 import Image from "next/image";
 import BgCover from "../../../client/public/userBgCover.png";
 import AtmCardComponent from "../account/AtmCardComponent";
+import { AccountType, UserType } from "@repo/interface/interface";
 
-function UserDetail() {
+function UserDetail({
+   user,
+   accounts,
+}: {
+   user: UserType;
+   accounts: AccountType[];
+}) {
    return (
       <div className=" h-screen w-[396px] border-l">
          <div />
@@ -25,10 +32,10 @@ function UserDetail() {
          <div className="p-4">
             <div className="flex flex-col items-start -mt-12 mb-4">
                <Avatar isBordered className=" w-16 h-16" />
-               <h3 className="text-2xl font-semibold mt-2">Sultan Ali</h3>
-               <p className="text-sm text-muted-foreground">
-                  adrian.davis@example.com
-               </p>
+               <h3 className="text-2xl font-semibold mt-2">
+                  {user.firstName + " " + user.lastName}
+               </h3>
+               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
             <div className="flex items-center justify-between pt-4 border-t-2">
                <div className="flex items-center gap-2">
@@ -41,10 +48,10 @@ function UserDetail() {
             </div>
             <div className="relative top-0 -mt-2 border-b-2 h-[250px]">
                <div className=" absolute right-2 z-30">
-                  <AtmCardComponent />
+                  <AtmCardComponent account={accounts[0]} />
                </div>
                <div className=" absolute top-6 -right-4">
-                  <AtmCardComponent className="bg-gradient-to-r from-orange-500 to-red-400" />
+                  <AtmCardComponent account={accounts[0]} className="bg-gradient-to-r from-orange-500 to-red-400" />
                </div>
             </div>
 

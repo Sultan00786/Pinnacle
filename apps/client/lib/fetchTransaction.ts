@@ -21,7 +21,6 @@ export const fuctionTxs = async (
    // }
    console.log("hellow ");
    const txs = await getTransaction(isFull);
-   console.log(txs);
    if (txs.success && txs.transactions && filter === "All") {
       setTableData(txs.transactions);
       toast.update(toastId, {

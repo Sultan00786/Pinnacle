@@ -31,11 +31,6 @@ export default function AddCardForm({ isBackButton = true }) {
    } = useForm<AddCardInputProps>();
 
    const onSubmit: SubmitHandler<AddCardInputProps> = async (data) => {
-      console.log({
-         ...data,
-         ...expiryDate,
-         ...{ source: selectSource },
-      });
       const toadLoaing = toast.loading("Please wait");
       const response = await isAccountPressent(data.cardNumber);
       if (response.success) {
@@ -60,7 +55,6 @@ export default function AddCardForm({ isBackButton = true }) {
             ...expiryDate,
             ...{ source: selectSource },
          };
-         console.log(combineData);
          dispatch(setAccount(combineData));
          dispatch(setStep(3));
          toast.dismiss(toadLoaing);

@@ -46,7 +46,6 @@ function TransferDetails() {
          amount: Number(data.amount * 100),
          source: selectSource,
       };
-      console.log(combine);
       const response = await p2pTransaction(combine);
       if (!response.success) {
          console.log(response.error)
@@ -58,7 +57,6 @@ function TransferDetails() {
          });
          return
       }
-      console.log(response);
       toast.update(toastId, {
          render: "Transaction Successful",
          type: "success",
@@ -105,7 +103,7 @@ function TransferDetails() {
                         placeholder="Description"
                         variant="bordered"
                         // eslint-disable-next-line no-console
-                        onClear={() => console.log("textarea cleared")}
+                        onClear={() => {}}
                      />
                   </div>
                </div>

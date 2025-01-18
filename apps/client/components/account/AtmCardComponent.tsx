@@ -2,8 +2,15 @@
 import React, { HTMLAttributes } from "react";
 import masterCardimg from "../../../client/public/masterCardimg.png";
 import Image from "next/image";
+import { AccountType } from "@repo/interface/interface";
 
-function AtmCardComponent({ className = "" }: { className?: string }) {
+function AtmCardComponent({
+   className = "",
+   account,
+}: {
+   className?: string;
+   account: AccountType;
+}) {
    return (
       <div>
          <div
@@ -14,7 +21,7 @@ function AtmCardComponent({ className = "" }: { className?: string }) {
                   <div className="">
                      <p className="font-light">Name</p>
                      <p className="font-medium tracking-widest">
-                        Carter Mullen
+                        {account.accountHolder}
                      </p>
                   </div>
                   <Image
@@ -35,13 +42,13 @@ function AtmCardComponent({ className = "" }: { className?: string }) {
                      <div className="">
                         <p className="text-xs font-light">Valid From</p>
                         <p className="text-base font-medium tracking-widest">
-                           11/15
+                           --
                         </p>
                      </div>
                      <div className="">
                         <p className="text-xs font-light">Expiry</p>
                         <p className="text-base font-medium tracking-widest">
-                           03/25
+                           {account.expiryDate}
                         </p>
                      </div>
 

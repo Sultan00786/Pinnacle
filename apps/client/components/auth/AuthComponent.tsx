@@ -1,20 +1,16 @@
 "use client";
 import { RootState } from "@repo/interface/interface";
-import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
+import { useSelector } from "react-redux";
+import LoginImage from "../../public/image.png";
 import AddCardForm from "../account/AddCardForm";
 import OtpVerify from "../account/OtpVerify";
 import Logo from "../Logo";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUpForm";
-import Image from "next/image";
-import LoginImage from "../../public/image.png";
 
 export default function AuthComponent({ authType }: { authType: string }) {
    const { step } = useSelector((state: RootState) => state.auth);
-
-   const dispatch = useDispatch();
-   const router = useRouter();
 
    return (
       <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-4">

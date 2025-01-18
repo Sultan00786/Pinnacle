@@ -8,18 +8,6 @@ export async function POST(
    res: NextApiResponse
 ) {
    try {
-      console.log(req.body);
-      // const user = await prisma.user.create({
-      //    data: {
-      //       email: "john.doe@example.com",
-      //       password: "XXXXXXXXXXX",
-      //       firstName: "John",
-      //       lastName: "Doe",
-      //       address: "123 Main St",
-      //       state: "CA",
-      //       dateOfBirth: new Date("1990-01-01"),
-      //    },
-      // });
       return NextResponse.json({
          message: "User created successfully",
       });

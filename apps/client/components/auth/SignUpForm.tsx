@@ -5,9 +5,8 @@ import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { isUserPresent } from "../../app/lib/action/isUserPresent";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { isUserPresent } from "../../app/lib/action/isUserPresent";
 
 export default function SignUpForm() {
    const router = useRouter();
