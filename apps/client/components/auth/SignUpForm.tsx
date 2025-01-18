@@ -5,9 +5,8 @@ import { Button, Input } from "@repo/ui/component";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { isUserPresent } from "../../app/lib/action/isUserPresent";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { isUserPresent } from "../../app/lib/action/isUserPresent";
 
 export default function SignUpForm() {
    const router = useRouter();
@@ -18,15 +17,12 @@ export default function SignUpForm() {
       formState: { errors, isSubmitSuccessful },
    } = useForm<SignUpIputProps>();
 
-   const onSignUp: SubmitHandler<SignUpIputProps> = async (
-      data
-   ) => {
+   const onSignUp: SubmitHandler<SignUpIputProps> = async (data) => {
       const toatId = toast.loading("Please wait");
       const response = await isUserPresent(data.email);
       if (response.success) {
          toast.update(toatId, {
-            render:
-               "This email is aready present, Enter different email",
+            render: "This email is aready present, Enter different email",
             type: "error",
             isLoading: false,
             autoClose: 6000,
@@ -36,15 +32,13 @@ export default function SignUpForm() {
 
       dispatch(setUser(data));
       dispatch(setStep(2));
-      toast.dismiss(toatId)
+      toast.dismiss(toatId);
    };
 
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">Sign up</h1>
-         <p className="text-gray-600 mb-6">
-            Please enter your details.
-         </p>
+         <p className="text-gray-600 mb-6">Please enter your details.</p>
          <form>
             <div className="flex gap-4">
                <Input
@@ -106,22 +100,17 @@ export default function SignUpForm() {
                type="password"
                errors={errors}
                register={register}
-               pattern={
-                  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
-               }
+               pattern={/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/}
             />
 
-            <Button
-               type="submit"
-               onClick={handleSubmit(onSignUp)}
-            >
+            <Button type="submit" onClick={handleSubmit(onSignUp)}>
                Next
             </Button>
             <p className="text-center text-gray-600 mt-4 pb-4">
                Already have an account?{" "}
                <span
                   onClick={() => router.push("/login")}
-                  className="text-sky-700 font-semibold cursor-pointer transition-all duration-150 hover:text-sky-900"
+                  className="text-purple-500 font-semibold cursor-pointer transition-all duration-150 hover:text-purple-700"
                >
                   Login
                </span>

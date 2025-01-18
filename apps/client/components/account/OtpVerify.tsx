@@ -33,7 +33,6 @@ export default function OtpVerify({isSignUp = true}) {
          toast.success("Account Created ✔✔")
          isSignUp && router.push("/dashboard");
          dispatch(setStep(1))
-         console.log(res);
       }
    }
 

@@ -1,5 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import {
+   PrismaClient,
+   TransactionCategory,
+   TransactionStatus,
+} from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export { prisma, PrismaClient };
+export { prisma, TransactionCategory, TransactionStatus };

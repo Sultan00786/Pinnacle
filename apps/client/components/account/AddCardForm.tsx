@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { setUpRecaptcha } from "../../lib/firebaseAuth";
-import { setAccount, setStep } from "@repo/store/recoil";
+import { toast } from "react-toastify";
+import SelectBankSource from "../SelectBankSource";
+import Msg from "../toast/MsgCard";
 import BackButton from "./BackButton";
 import { ConfirmationResult } from "firebase/auth";
 import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
-import { toast, ToastContentProps } from "react-toastify";
-import Msg from "../toast/MsgCard";
+import { setUpRecaptcha } from "../../lib/firebaseAuth";
+import { setAccount, setStep } from "@repo/store/recoil";
 
 export default function AddCardForm({ isBackButton = true }) {
    const router = useRouter();
    const { user } = useSelector((state: RootState) => state.auth);
    const dispatch = useDispatch();
+   const [selectSource, setSelectSource] = useState("");
    const [expiryDate, setExpiryDate] = useState({
       month: "",
       year: "",
@@ -48,7 +50,11 @@ export default function AddCardForm({ isBackButton = true }) {
          );
          window.confirmationResult = respone;
 
-         const combineData = { ...data, ...expiryDate };
+         const combineData = {
+            ...data,
+            ...expiryDate,
+            ...{ source: selectSource },
+         };
          dispatch(setAccount(combineData));
          dispatch(setStep(3));
          toast.dismiss(toadLoaing);
@@ -71,10 +77,13 @@ export default function AddCardForm({ isBackButton = true }) {
    return (
       <div>
          <h1 className="text-4xl font-bold mb-2">Add New Card</h1>
-         <p className="text-gray-500 mb-6">
+         <p className="text-gray-500 mb-10">
             Securely add a new payment card to your account.
          </p>
          <form>
+            <div className=" mb-2">
+               <SelectBankSource setSelectSource={setSelectSource} />
+            </div>
             <div className="flex gap-4 ">
                <div className=" w-[45%]">
                   <Input

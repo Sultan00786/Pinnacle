@@ -21,9 +21,13 @@ model User {
   lastName       String
   address        String
   state          String
+  totalBalance   Int        @default(0)
   dateOfBirth    DateTime
-  createdAt      DateTime  @default(now())
+  createdAt      DateTime   @default(now())
   accounts       Account[]
+  send           Transaction[] @relation(name: "Recieve")
+  recieve        Transaction[] @relation(name: "Send")
+  onRampPage     OnRampTransaction[]
 }
 
 model Account {
@@ -34,15 +38,46 @@ model Account {
   phone               String
   expiryDate          String
   cvv                 Int
+  source              String
   createdAt           DateTime @default(now())
   userId              Int
   user                User     @relation(fields: [userId], references: [id])
 }
 
-model Otp {
-  id        Int      @id @default(autoincrement())
-  otp       Int      @unique
-  to        String
-  isExpired Boolean
-  createdAt DateTime @default(now())
+model Transaction {
+  id                  Int       @id @default(autoincrement())
+  amount              Int
+  from                Int
+  to                  Int
+  date                DateTime  @default(now())
+  status              TransactionStatus
+  category            TransactionCategory
+  sender              User      @relation(name: "Recieve", fields: [from], references: [id])
+  reciever            User      @relation(name: "Send", fields: [to], references: [id])
+}
+
+model OnRampTransaction {
+  id          Int         @id @default(autoincrement())
+  status      TransactionStatus
+  token       String      @unique
+  provider    String
+  amount      Int
+  startTime   DateTime 
+  userId      Int
+  receiveAcc  String
+  user        User        @relation(fields: [userId], references: [id])
+}
+
+ enum TransactionCategory {
+  Income
+  Deposit
+  Subscirptions
+  Food
+  Groceries
+}
+
+enum TransactionStatus {
+  Processing
+  Success
+  Declined
 }

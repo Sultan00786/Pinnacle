@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
    Chart as ChartJS,
    ArcElement,
@@ -8,26 +8,32 @@ import {
    ChartData,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { AccountType } from "@repo/interface/interface";
+import { set } from "react-hook-form";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-function DoughnutChart() {
+function DoughnutChart({ accounts }: { accounts: AccountType[] }) {
+   const [balance, setBalance] = useState<number[]>([] as number[]);
+   const [color, setColor] = useState<string[]>([] as string[]);
+   useEffect(() => {
+      setBalance(accounts.map((acc, index) => acc.balance));
+      setColor(
+         accounts.map((acc, index) => `rgb(152, 78, 216, ${1 - index / 10})`)
+      );
+   }, [accounts]);
    const data = {
       datasets: [
          {
             label: "$",
-            data: [2000, 5400, 895, 3903, 3330, 3000],
+            data: balance,
             // i want bg color theme in purple
-            backgroundColor: [
-               "rgb(152, 78, 216, 1)",
-               "rgb(152, 78, 217, 0.9)",
-               "rgb(152, 78, 218, 0.8)",
-               "rgb(152, 78, 219, 0.7)",
-               "rgb(152, 78, 220, 0.6)",
-               "rgb(152, 78, 221, 0.5)",
-            ],
-            hoverOffset: 12,
-            cutout: "68%",
+            // backgroundColor: accounts.map(
+            //    (acc, index) => `rgb(152, 78, 216, ${1 - index / 10})`
+            // ),
+            backgroundColor: color,
+            hoverOffset: 8,
+            cutout: "65%",
          },
       ],
    };

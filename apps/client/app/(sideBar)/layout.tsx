@@ -3,7 +3,7 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import { ReactNode, useEffect } from "react";
 import SideBar from "../../components/SideBar";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const tabs = [
    {
@@ -33,17 +33,17 @@ const tabs = [
 export default function SideBarLayout({ children }: { children: ReactNode }) {
    const session = useSession();
    const router = useRouter();
-   console.log(session);
+   const path = usePathname();
 
-   useEffect(() => {
-      if (!session?.data?.user) {
-         router.push("/login");
-      }
-   }, []);
+   // if (session?.data?.user) {
+   //    router.push(`${path}`);
+   // } else {
+   //    router.push("/login");
+   // }
    return (
-      <div className="flex w-screen">
+      <div className="flex w-screen overflow-y-hidden">
          <SideBar />
-         <div className="w-full">{children}</div>
+         <div className="relative w-full overflow-y-hidden">{children}</div>
       </div>
    );
 }

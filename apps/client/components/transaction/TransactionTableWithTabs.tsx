@@ -1,20 +1,20 @@
-import React from "react";
-import {
-   Table,
-   TableHeader,
-   TableColumn,
-   TableBody,
-   TableRow,
-   TableCell,
-   Tabs,
-   Tab,
-} from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
+import { AccountType, TransactionType } from "@repo/interface/interface";
+import { useEffect, useState } from "react";
+import { fuctionTxs } from "../../lib/fetchTransaction";
 import BankCard from "./BankCard";
+import TableComponent from "./TableComponent";
+import { Loader } from "@repo/ui/component";
 
-const colums = ["Transcation", "Amount", "Status", "Date", "Category"];
 const tabs = ["Bank 1", "Bank 2", "Bank 3", "Bank 4", "Bank 5", "Bank 6"];
 
-function TransactionTableWithTabs() {
+function TransactionTableWithTabs({
+   table_data,
+   accounts,
+}: {
+   table_data: TransactionType[];
+   accounts: AccountType[];
+}) {
    return (
       <div className="w-full h-full">
          <Tabs
@@ -26,56 +26,29 @@ function TransactionTableWithTabs() {
                tabContent: "group-data-[selected=true]:text-purple-500",
             }}
          >
-            {tabs.map((tab) => (
+            {accounts.map((tab) => (
+               <Tab key={tab.source} title={tab.source}>
+                  <div>
+                     <div className=" mb-3">
+                        <BankCard
+                           name={tab.source}
+                           amount={tab.balance / 100}
+                        />
+                     </div>
+                     <TableComponent table_data={table_data} />
+                  </div>
+               </Tab>
+            ))}
+            {/* {tabs.map((tab) => (
                <Tab key={tab} title={tab}>
                   <div>
                      <div className=" mb-3">
                         <BankCard name={tab} amount={5050.98} />
                      </div>
-                     <Table
-                        classNames={{
-                           th: " bg-purple-500/80 text-white",
-                        }}
-                     >
-                        <TableHeader className="custom-header">
-                           {colums.map((col) => (
-                              <TableColumn>{col}</TableColumn>
-                           ))}
-                        </TableHeader>
-                        <TableBody>
-                           <TableRow key="1" className="border-b pb-1">
-                              <TableCell>Tony Reichert</TableCell>
-                              <TableCell>CEO</TableCell>
-                              <TableCell>Active</TableCell>
-                              <TableCell>Active</TableCell>
-                              <TableCell>Active</TableCell>
-                           </TableRow>
-                           <TableRow key="2" className="border-b pb-1">
-                              <TableCell>Zoey Lang</TableCell>
-                              <TableCell>Technical Lead</TableCell>
-                              <TableCell>Paused</TableCell>
-                              <TableCell>Paused</TableCell>
-                              <TableCell>Paused</TableCell>
-                           </TableRow>
-                           <TableRow key="3" className="border-b pb-1">
-                              <TableCell>Jane Fisher</TableCell>
-                              <TableCell>Senior Developer</TableCell>
-                              <TableCell>Active</TableCell>
-                              <TableCell>Active</TableCell>
-                              <TableCell>Active</TableCell>
-                           </TableRow>
-                           <TableRow key="4">
-                              <TableCell>William Howard</TableCell>
-                              <TableCell>Community Manager</TableCell>
-                              <TableCell>Vacation</TableCell>
-                              <TableCell>Vacation</TableCell>
-                              <TableCell>Vacation</TableCell>
-                           </TableRow>
-                        </TableBody>
-                     </Table>
+                     <TableComponent table_data={table_data} />
                   </div>
                </Tab>
-            ))}
+            ))} */}
          </Tabs>
       </div>
    );
