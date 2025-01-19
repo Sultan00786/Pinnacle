@@ -5,15 +5,17 @@ import {
    UserType,
 } from "@repo/interface/interface";
 import { DashboardHeadline, Loader, PurbleButton } from "@repo/ui/component";
-import { Suspense, useEffect, useState } from "react";
+import { MouseEventHandler, Suspense, useEffect, useState } from "react";
 import ChartCard from "../../../components/chart/ChartCard";
 import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
 import UserDetail from "../../../components/user/UserDetail";
 import { fuctionTxs } from "../../../lib/fetchTransaction";
 import getUserDetails from "../../lib/support/getUserDetails";
 import RootLaoding from "../../loading";
+import { useRouter } from "next/navigation";
 
 function Dashboard() {
+   const router = useRouter();
    const [loading, setLoading] = useState(false);
    const [tableData, setTableData] = useState<TransactionType[]>(
       [] as TransactionType[]
@@ -61,7 +63,11 @@ function Dashboard() {
                   <h2 className=" text-2xl font-extrabold">
                      Recent transactions
                   </h2>
-                  <PurbleButton>View All</PurbleButton>
+                  <div>
+                     <PurbleButton onClick={() => router.push("/history")}>
+                        View All
+                     </PurbleButton>
+                  </div>
                </div>
                <Suspense fallback={<RootLaoding />}>
                   <TransactionTableWithTabs
