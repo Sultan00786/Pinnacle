@@ -5,14 +5,14 @@ import {
    UserType,
 } from "@repo/interface/interface";
 import { DashboardHeadline, Loader, PurbleButton } from "@repo/ui/component";
-import { MouseEventHandler, Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import ChartCard from "../../../components/chart/ChartCard";
 import TransactionTableWithTabs from "../../../components/transaction/TransactionTableWithTabs";
 import UserDetail from "../../../components/user/UserDetail";
 import { fuctionTxs } from "../../../lib/fetchTransaction";
 import getUserDetails from "../../lib/support/getUserDetails";
 import RootLaoding from "../../loading";
-import { useRouter } from "next/navigation";
 
 function Dashboard() {
    const router = useRouter();
@@ -48,15 +48,12 @@ function Dashboard() {
    return (
       <div className="flex ">
          <div className="w-[900px] h-full flex flex-col px-6 gap-6 relative">
-            <DashboardHeadline
-               children={
-                  <div>
-                     Welcom,{" "}
-                     <span className=" text-purple-700">{user.firstName}</span>
-                  </div>
-               }
-               para="Access & manage your account and transactions efficiently."
-            />
+            <DashboardHeadline para="Access & manage your account and transactions efficiently.">
+               <div>
+                  Welcom,{" "}
+                  <span className=" text-purple-700">{user.firstName}</span>
+               </div>
+            </DashboardHeadline>
             <ChartCard accounts={accounts} user={user} />
             <div className=" w-full">
                <div className=" flex justify-between -mt-[6px]">

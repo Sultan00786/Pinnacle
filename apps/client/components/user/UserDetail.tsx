@@ -7,17 +7,6 @@ import BgCover from "../../../client/public/userBgCover.png";
 import AtmCardComponent from "../account/AtmCardComponent";
 import AddMoneyCard from "./AddMoneyCard";
 
-const SUPPORTED_BANK = [
-   {
-      name: "Axis Bank",
-      redirect: "https://www.axisbank.com/",
-   },
-   {
-      name: "HDFC Bank",
-      redirect: "https://netbanking.hdfcbank.com/netbanking/",
-   },
-];
-
 function UserDetail({
    user,
    accounts,

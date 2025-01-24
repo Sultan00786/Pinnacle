@@ -1,12 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import DoughnutChart from "./DoughnutChart";
-import { Plus } from "lucide-react";
-import getUserDetails from "../../app/lib/support/getUserDetails";
 import { AccountType, UserType } from "@repo/interface/interface";
-import { set } from "react-hook-form";
-import { Loader } from "@repo/ui/component";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import DoughnutChart from "./DoughnutChart";
 
 function ChartCard({
    user,

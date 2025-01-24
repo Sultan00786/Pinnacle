@@ -1,11 +1,10 @@
 "use server";
-import { getServerSession } from "next-auth";
-import React from "react";
-import { authOption } from "../../../lib/nextAuth";
 import { prisma } from "@repo/db/client";
 import { TransactionType } from "@repo/interface/interface";
+import { getServerSession } from "next-auth";
+import { authOption } from "../../../lib/nextAuth";
 
-export default async function getTransaction(isFull: Boolean = false) {
+export default async function getTransaction(isFull: boolean = false) {
    try {
       const session = await getServerSession(authOption);
       if (!session?.user?.id)

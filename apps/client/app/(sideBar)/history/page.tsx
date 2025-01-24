@@ -21,13 +21,12 @@ function TransactionHistrory() {
    );
    const [select, setSelect] = useState("All");
 
-   async function func() {
-      setLoading(true);
-      await fuctionTxs(setTableData, true, select);
-      setLoading(false);
-   }
-
    useEffect(() => {
+      async function func() {
+         setLoading(true);
+         await fuctionTxs(setTableData, true, select);
+         setLoading(false);
+      }
       func();
    }, [select]);
 
@@ -41,10 +40,9 @@ function TransactionHistrory() {
 
    return (
       <div className=" px-6">
-         <DashboardHeadline
-            children={"Transaction History"}
-            para="Gain Insights and Track Your Transactions Over Time"
-         />
+         <DashboardHeadline para="Gain Insights and Track Your Transactions Over Time">
+            Transaction History
+         </DashboardHeadline>
          <div className="flex justify-between items-center mt-4 mb-2">
             <h1 className="text-xl font-semibold">Transaction History</h1>
             <div className="w-[13%]">
@@ -52,13 +50,12 @@ function TransactionHistrory() {
                   setSelectSource={setSelect}
                   defaultValue="All"
                   selectData={data}
-                  children={
-                     <div className="className= w-fit flex gap-2 items-center text-gray-600">
-                        <ListFilter size={20} />
-                        <p>Apply Filter</p>
-                     </div>
-                  }
-               />
+               >
+                  <div className="className= w-fit flex gap-2 items-center text-gray-600">
+                     <ListFilter size={20} />
+                     <p>Apply Filter</p>
+                  </div>
+               </SelectBankSource>
             </div>
          </div>
          <TableComponent table_data={tableData} />

@@ -1,10 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
-import AuthComponent from "../../components/auth/AuthComponent";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import AuthComponent from "../../components/auth/AuthComponent";
 
-function page() {
+function Login() {
    const router = useRouter();
    const session = useSession();
    if (session?.data?.user) {
@@ -13,4 +12,4 @@ function page() {
    return <AuthComponent authType="login" />;
 }
 
-export default page;
+export default Login;

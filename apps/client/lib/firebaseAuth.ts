@@ -2,8 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
    getAuth,
    signInWithPhoneNumber,
-   RecaptchaVerifier,
-   ConfirmationResult,
+   RecaptchaVerifier
 } from "firebase/auth";
 
 const firebaseConfig = {

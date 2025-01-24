@@ -12,13 +12,15 @@ import MsgOtp from "../toast/MsgOtp";
 import BackButton from "./BackButton";
 import { setAccount, setStep, setUser } from "@repo/store/recoil";
 
-export default function OtpVerify({isSignUp = true}) {
+export default function OtpVerify({ isSignUp = true }: { isSignUp?: boolean }) {
    const [otp, setOtp] = useState("");
    const handleChange = (code: string) => setOtp(code);
-   const renderInput = (props: any) => <input {...props} />;
+   const renderInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+      <input {...props} />
+   );
 
    const router = useRouter();
-   const dispatch = useDispatch()
+   const dispatch = useDispatch();
 
    const { user } = useSelector((state: RootState) => state.auth);
    const account = useSelector((state: RootState) => state.account);
@@ -26,13 +28,17 @@ export default function OtpVerify({isSignUp = true}) {
    async function createAccout(toastLoaing: Id) {
       const res = await nextAuthSignUp(account);
       if (res.status) {
-         dispatch(setUser(null))
-         dispatch(setAccount(null))
+         const setUserResult = dispatch(setUser(null));
+         const setAccountResult = dispatch(setAccount(null));
+         if (setUserResult && setAccountResult) {
+            console.log(setUserResult);
+            console.log(setAccountResult);
+         }
          toast.dismiss(toastLoaing);
-         isSignUp && toast.success("Signup Done 🎉✨");
-         toast.success("Account Created ✔✔")
-         isSignUp && router.push("/dashboard");
-         dispatch(setStep(1))
+         if (isSignUp) toast.success("Signup Done 🎉✨");
+         toast.success("Account Created ✔✔");
+         if (isSignUp) router.push("/dashboard");
+         dispatch(setStep(1));
       }
    }
 
@@ -48,7 +54,7 @@ export default function OtpVerify({isSignUp = true}) {
             state: user?.state,
             redirect: false,
          });
-   
+
          if (response?.status !== 200) {
             toast.update(toastLoaing, {
                render: "Error occure while verifying OTP",
@@ -61,7 +67,7 @@ export default function OtpVerify({isSignUp = true}) {
          }
          await createAccout(toastLoaing);
       } catch (error) {
-         console.log(error)
+         console.log(error);
          toast.update(toastLoaing, {
             render: "Error occure while verifying OTP",
             type: "error",
@@ -76,9 +82,11 @@ export default function OtpVerify({isSignUp = true}) {
       const confirmationResult = window.confirmationResult;
       confirmationResult
          .confirm(otp)
-         .then((result) => {
-            isSignUp ? afterVerificationWithSignup(toastLoaing)
-                     : createAccout(toastLoaing)
+         .then(() => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            isSignUp
+               ? afterVerificationWithSignup(toastLoaing)
+               : createAccout(toastLoaing);
          })
          .catch((error) => {
             toast.update(toastLoaing, {

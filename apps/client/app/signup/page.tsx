@@ -1,9 +1,8 @@
 "use client";
 
-import path from "path";
-import AuthComponent from "../../components/auth/AuthComponent";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import AuthComponent from "../../components/auth/AuthComponent";
 
 export default function Signup() {
    const router = useRouter();

@@ -49,17 +49,16 @@ function AddMoneyCard() {
       <div className=" mb-6">
          <div className="mt-8">
             <SelectBankSource
-               children={
-                  <div>
-                     <div className="className= w-fit flex gap-2 items-center text-gray-600">
-                        <Landmark className=" text-purple-500 " />
-                        <p>Select Bank</p>
-                     </div>
-                  </div>
-               }
                setSelectSource={setSelect}
                selectData={SUPPORTED_BANK}
-            />
+            >
+               <div>
+                  <div className="className= w-fit flex gap-2 items-center text-gray-600">
+                     <Landmark className=" text-purple-500 " />
+                     <p>Select Bank</p>
+                  </div>
+               </div>
+            </SelectBankSource>
          </div>
          <div className="mt-4 -mb-3">
             <Input

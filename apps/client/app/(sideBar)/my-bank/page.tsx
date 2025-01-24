@@ -33,10 +33,9 @@ function MyBanks() {
    return (
       <div>
          <div className="px-5 overflow-hidden">
-            <DashboardHeadline
-               children={"My Bank Accounts"}
-               para={"Easily Manage your Banking Activities"}
-            />
+            <DashboardHeadline para={"Easily Manage your Banking Activities"}>
+               My Bank Accounts
+            </DashboardHeadline>
             <h2 className=" font-semibold text-xl mt-4 ">
                <span className=" text-purple-600">Total Balance: </span>$
                {user.totalBalance / 100}
@@ -47,8 +46,11 @@ function MyBanks() {
                </h3>
                <div className="  ">
                   <div className=" absolute top-48 -left-1 z-10 grid grid-cols-3 grid-rows-2 gap-y-4">
-                     {user.accounts?.map((account) => (
-                        <div className=" flex flex-col items-center">
+                     {user.accounts?.map((account, index) => (
+                        <div
+                           key={index}
+                           className=" flex flex-col items-center"
+                        >
                            <div className="scale-[1.23]">
                               <AtmCardComponent
                                  account={account as AccountType}

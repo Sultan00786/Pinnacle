@@ -1,6 +1,6 @@
 "use client";
 import { NextUIProvider } from "@nextui-org/react";
-import { configureStore, createStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "@repo/store/recoil";
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";

@@ -1,22 +1,18 @@
 "use client";
-import { AddCardInputProps, RootState } from "@repo/interface/interface";
+import { AddCardInputProps } from "@repo/interface/interface";
+import { setAccount, setStep } from "@repo/store/recoil";
 import { Button, Input } from "@repo/ui/component";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
+import { setUpRecaptcha } from "../../lib/firebaseAuth";
 import SelectBankSource from "../SelectBankSource";
 import Msg from "../toast/MsgCard";
 import BackButton from "./BackButton";
-import { ConfirmationResult } from "firebase/auth";
-import { isAccountPressent } from "../../app/lib/action/isAccountPressent";
-import { setUpRecaptcha } from "../../lib/firebaseAuth";
-import { setAccount, setStep } from "@repo/store/recoil";
 
-export default function AddCardForm({ isBackButton = true }) {
-   const router = useRouter();
-   const { user } = useSelector((state: RootState) => state.auth);
+export default function AddCardForm({ isBackButton = true }:{isBackButton?:boolean}) {
    const dispatch = useDispatch();
    const [selectSource, setSelectSource] = useState("");
    const [expiryDate, setExpiryDate] = useState({
@@ -27,7 +23,7 @@ export default function AddCardForm({ isBackButton = true }) {
    const {
       register,
       handleSubmit,
-      formState: { errors, isSubmitSuccessful },
+      formState: { errors },
    } = useForm<AddCardInputProps>();
 
    const onSubmit: SubmitHandler<AddCardInputProps> = async (data) => {

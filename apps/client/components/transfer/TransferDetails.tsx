@@ -1,22 +1,11 @@
 "use client";
-import { Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Textarea } from "@nextui-org/react";
 import { Button, Input } from "@repo/ui/component";
-import { CreditCardIcon } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import SelectBankSource from "../SelectBankSource";
-import { sources } from "next/dist/compiled/webpack/webpack";
-import p2pTransaction, { P2Ptype } from "../../app/lib/action/p2pTransaction";
 import { toast } from "react-toastify";
-
-const data = [
-   "Pinnacle Bank",
-   "Bank of America",
-   "Bank of Austrailia",
-   "Bank of India",
-   "Bank of Japan",
-   "Bank of Canada",
-];
+import p2pTransaction from "../../app/lib/action/p2pTransaction";
+import SelectBankSource from "../SelectBankSource";
 
 interface TransferDetail {
    email: string;
@@ -25,11 +14,6 @@ interface TransferDetail {
 }
 
 function TransferDetails() {
-   //    const [transfer, setTransfer] = useState({
-   //       email: "",
-   //       accountNumber: "",
-   //       amount: "",
-   //    });
    const [selectSource, setSelectSource] = useState("");
 
    const {
@@ -102,7 +86,6 @@ function TransferDetails() {
                         label="Description (Optional)"
                         placeholder="Description"
                         variant="bordered"
-                        // eslint-disable-next-line no-console
                         onClear={() => {}}
                      />
                   </div>
@@ -119,7 +102,7 @@ function TransferDetails() {
                </div>
                <div className=" w-full flex gap-8 py-3 border-b">
                   <div className="w-1/2">
-                     <p className=" text-gray-600">Recipent's Email Adress</p>
+                     <p className=" text-gray-600">{`Recipent's Email Adress`}</p>
                   </div>
                   <div className=" w-full pr-[400px]">
                      <Input
@@ -135,7 +118,7 @@ function TransferDetails() {
                <div className=" w-full flex gap-8 py-3 border-b">
                   <div className="w-1/2">
                      <p className=" text-gray-600">
-                        Recipient's Bank Account Number
+                        {`Recipent's Account Number`}
                      </p>
                   </div>
                   <div className=" w-full pr-[400px]">

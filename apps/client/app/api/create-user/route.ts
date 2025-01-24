@@ -1,22 +1,13 @@
 // pages/api/create-user.ts
-import { prisma } from "@repo/db/client";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
-export async function POST(
-   req: NextApiRequest,
-   res: NextApiResponse
-) {
+export async function POST() {
    try {
       return NextResponse.json({
          message: "User created successfully",
       });
-   } catch (error: any) {
-      console.error(
-         "Error during user creation:",
-         error.message
-      );
-      console.error("Stack Trace:", error.stack);
+   } catch (error) {
+      console.error("Error during user creation:", error);
       return NextResponse.json({
          error: "Internal Server Error",
       });
