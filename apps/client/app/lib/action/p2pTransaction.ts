@@ -32,16 +32,8 @@ export default async function p2pTransaction({
             message: "Transaction fail !!",
          };
       }
-
       const session = await getServerSession(authOption);
-      const fromUserId = Number(session?.user?.id);
-      if (isNaN(fromUserId)) {
-         return {
-            success: false,
-            error: "Please Login",
-            message: "Transaction fail !!",
-         };
-      }
+
       if (!session?.user?.id) {
          return {
             success: false,
@@ -50,37 +42,12 @@ export default async function p2pTransaction({
          };
       }
 
-      const toUser = await prisma.user.findFirst({
-         where: {
-            email: email,
-         },
-      });
+      const fromUserId = Number(session?.user?.id);
 
-      const toUserId = toUser?.id;
-      if (!toUserId) {
+      if (isNaN(fromUserId)) {
          return {
             success: false,
-            error: "Recipient user not found",
-            message: "Transaction fail !!",
-         };
-      }
-      const toUserAccount = await prisma.account.findFirst({
-         where: {
-            accountNo: accountNumber,
-            userId: toUserId,
-         },
-      });
-      if (!toUserAccount) {
-         return {
-            success: false,
-            error: "Recipient Account not found",
-            message: "Transaction fail !!",
-         };
-      }
-      if (toUserAccount?.source !== source) {
-         return {
-            success: false,
-            error: "Provide Recipient Account source",
+            error: "Please Login",
             message: "Transaction fail !!",
          };
       }
@@ -93,7 +60,7 @@ export default async function p2pTransaction({
             id: true,
             totalBalance: true,
             accounts: true,
-         }
+         },
       });
 
       if (!fromUser) {
@@ -103,10 +70,48 @@ export default async function p2pTransaction({
             message: "Transaction fail !!",
          };
       }
+
       if (fromUser.totalBalance < amount) {
          return {
             success: false,
             error: "Insufficient Balance",
+            message: "Transaction fail !!",
+         };
+      }
+
+      const toUser = await prisma.user.findFirst({
+         where: {
+            email: email,
+         },
+      });
+
+      if (!toUser?.id) {
+         return {
+            success: false,
+            error: "Recipient user not found",
+            message: "Transaction fail !!",
+         };
+      }
+
+      const toUserAccount = await prisma.account.findFirst({
+         where: {
+            accountNo: accountNumber,
+            userId: toUser.id,
+         },
+      });
+
+      if (!toUserAccount) {
+         return {
+            success: false,
+            error: "Recipient Account not found",
+            message: "Transaction fail !!",
+         };
+      }
+
+      if (toUserAccount?.source !== source) {
+         return {
+            success: false,
+            error: "Provide Recipient Account source",
             message: "Transaction fail !!",
          };
       }
@@ -119,7 +124,7 @@ export default async function p2pTransaction({
          while (remainingAmount > 0 && i < fromUser.accounts.length) {
             const account = fromUser.accounts[i];
             if (!account) {
-               continue;
+               throw new Error("Account not found");
             }
 
             await txs.$queryRaw`SELECT * FROM "Account" WHERE "userId" = ${account.id} FOR UPDATE`;
@@ -145,10 +150,10 @@ export default async function p2pTransaction({
             i++;
          }
 
-         await txs.$queryRaw`SELECT * FROM "Account" WHERE "userId" = ${toUserId} FOR UPDATE`;
+         await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${toUserAccount.id} FOR UPDATE`;
          await txs.account.updateMany({
             where: {
-               accountNo: accountNumber,
+               accountNo: toUserAccount.accountNo,
             },
             data: {
                balance: {
@@ -159,9 +164,10 @@ export default async function p2pTransaction({
          });
 
          await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${fromUser.id} FOR UPDATE`;
+
          const formUserRes = await txs.user.update({
             where: {
-               id: fromUserId,
+               id: fromUser.id,
             },
             data: {
                totalBalance: {
@@ -170,6 +176,7 @@ export default async function p2pTransaction({
                },
             },
          });
+
          if (!formUserRes) {
             return {
                success: false,
@@ -179,17 +186,21 @@ export default async function p2pTransaction({
          }
 
          await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${toUser.id} FOR UPDATE`;
+         console.log(
+            "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+         );
          const toUserres = await txs.user.update({
             where: {
-               id: toUserId,
+               id: toUser.id,
             },
             data: {
                totalBalance: {
                   //  increment: amount*100,
-                  increment: amount,
+                  increment: Number(amount),
                },
             },
          });
+
          if (!toUserres) {
             return {
                success: false,
@@ -199,11 +210,14 @@ export default async function p2pTransaction({
          }
 
          const randomNum = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+         console.log(
+            "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+         );
          const transactionRes = await txs.transaction.create({
             data: {
-               amount: amount,
+               amount: Number(amount),
                from: fromUser.id,
-               to: toUserId,
+               to: toUser.id,
                category:
                   randomNum === 1
                      ? "Food"
@@ -213,6 +227,9 @@ export default async function p2pTransaction({
                status: "Success",
             },
          });
+         console.log(
+            "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+         );
 
          if (!transactionRes) {
             return {

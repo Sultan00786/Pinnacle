@@ -32,7 +32,13 @@ function AtmCardComponent({
                <div className="pt-1">
                   <p className="font-light">Card No.</p>
                   <p className="tracking-more-wider font-medium">
-                     4312 567 7890 7864
+                     {account.accountNo.substring(0, 4) +
+                        " " +
+                        account.accountNo.substring(4, 8) +
+                        " " +
+                        account.accountNo.substring(8, 12) +
+                        " " +
+                        account.accountNo.substring(12, 16)}
                   </p>
                </div>
                <div className="pt-4 pr-6 sm:pt-6">

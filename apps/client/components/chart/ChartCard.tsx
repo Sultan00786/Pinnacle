@@ -6,6 +6,7 @@ import getUserDetails from "../../app/lib/support/getUserDetails";
 import { AccountType, UserType } from "@repo/interface/interface";
 import { set } from "react-hook-form";
 import { Loader } from "@repo/ui/component";
+import { useRouter } from "next/navigation";
 
 function ChartCard({
    user,
@@ -14,6 +15,7 @@ function ChartCard({
    user: UserType;
    accounts: AccountType[];
 }) {
+   const router = useRouter();
    return (
       <div className=" flex items-center gap-5 p-2 border border-gray-300 rounded-xl w-full shadow-md ">
          <div className=" w-[110px] ">
@@ -31,9 +33,14 @@ function ChartCard({
                   </p>
                </div>
             </div>
-            <div className=" h-fit flex text-purple-400 hover:text-purple-600 cursor-pointer">
+            <div
+               onClick={() => {
+                  router.push("/connect");
+               }}
+               className=" h-fit flex text-purple-400 hover:text-purple-600 cursor-pointer"
+            >
                <Plus />
-               <p>Add bank</p>
+               <p>Add Accounts</p>
             </div>
          </div>
       </div>

@@ -1,5 +1,5 @@
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import {
    HomeIcon,
@@ -13,6 +13,8 @@ import {
 import { Avatar, Button, Modal, ModalContent, User } from "@nextui-org/react";
 import { Button as Button2 } from "@repo/ui/component";
 import { signOut, useSession } from "next-auth/react";
+import getUserDetails from "../app/lib/support/getUserDetails";
+import { UserType } from "@repo/interface/interface";
 
 const navigation = [
    { name: "Home", href: "/dashboard", icon: HomeIcon },
@@ -32,8 +34,21 @@ const navigation = [
 
 function SideBar() {
    const pathname = usePathname();
-   const [isModal, setIsModal] = useState(false);
    const router = useRouter();
+   const [isModal, setIsModal] = useState(false);
+   const [user, setUser] = useState<UserType>({} as UserType);
+
+   useEffect(() => {
+      async function func() {
+         const res = await getUserDetails();
+         console.log(res);
+         if (res.user) {
+            setUser(res.user);
+         }
+      }
+      func();
+   }, []);
+
    return (
       <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r ">
          <nav className="flex-1 space-y-1 px-2 py-4">
@@ -83,7 +98,7 @@ function SideBar() {
          </nav>
          <div className="border-t p-4">
             <div className="flex items-center gap-3">
-               <User name="Sultan" description="john@example.com" />
+               <User name={user.firstName} description={user.email} />
                <button className="p-2 hover:bg-purple-400 hover:text-white rounded-md text-muted-foreground hover:text-foreground transition-colors">
                   <LogOut
                      className="h-5 w-5"

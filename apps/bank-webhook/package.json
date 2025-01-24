@@ -1,10 +1,9 @@
 {
    "name": "bank-webhook",
    "version": "1.0.0",
-   "type": "module",
    "main": "index.js",
    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "dev": "nodemon src/index.ts"
    },
    "keywords": [],
    "author": "",
@@ -12,11 +11,11 @@
    "description": "",
    "dependencies": {
       "@repo/db": "*",
-      "@repo/interface": "*",
-      "express": "^4.21.2",
-      "nodemon": "^3.1.9"
+      "@types/express": "^5.0.0",
+      "esbuild": "^0.24.0",
+      "express": "^4.21.2"
    },
    "devDependencies": {
-      "@types/express": "^5.0.0"
+      "nodemon": "^3.1.7"
    }
 }

@@ -32,6 +32,7 @@ function AddMoneyCard() {
    } = useForm<PropsType>();
 
    const onSubmit: SubmitHandler<PropsType> = async (data) => {
+      const tostId = toast.loading("Please wait");
       const res = await creatOnRampTransaction(
          data.amount,
          data.accountNo,
@@ -40,8 +41,8 @@ function AddMoneyCard() {
       if (res.success) {
          window.location.href =
             SUPPORTED_BANK.find((bank) => bank.name === select)?.id || "";
-      }
-      toast.error(res.message);
+      } else toast.error(res.message);
+      toast.dismiss(tostId);
    };
 
    return (

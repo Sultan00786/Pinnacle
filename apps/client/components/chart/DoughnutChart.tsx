@@ -17,7 +17,7 @@ function DoughnutChart({ accounts }: { accounts: AccountType[] }) {
    const [balance, setBalance] = useState<number[]>([] as number[]);
    const [color, setColor] = useState<string[]>([] as string[]);
    useEffect(() => {
-      setBalance(accounts.map((acc, index) => acc.balance));
+      setBalance(accounts.map((acc, index) => acc.balance / 100));
       setColor(
          accounts.map((acc, index) => `rgb(152, 78, 216, ${1 - index / 10})`)
       );
@@ -27,10 +27,6 @@ function DoughnutChart({ accounts }: { accounts: AccountType[] }) {
          {
             label: "$",
             data: balance,
-            // i want bg color theme in purple
-            // backgroundColor: accounts.map(
-            //    (acc, index) => `rgb(152, 78, 216, ${1 - index / 10})`
-            // ),
             backgroundColor: color,
             hoverOffset: 8,
             cutout: "65%",

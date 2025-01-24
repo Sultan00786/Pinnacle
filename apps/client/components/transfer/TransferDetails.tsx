@@ -48,14 +48,14 @@ function TransferDetails() {
       };
       const response = await p2pTransaction(combine);
       if (!response.success) {
-         console.log(response.error)
+         console.log(response.error);
          toast.update(toastId, {
             render: `${response.error}`,
             type: "error",
             isLoading: false,
             autoClose: 5000,
          });
-         return
+         return;
       }
       toast.update(toastId, {
          render: "Transaction Successful",
@@ -142,7 +142,7 @@ function TransferDetails() {
                      <Input
                         placeholder="**** **** **** ****"
                         id="accountNumber"
-                        type="number"
+                        type="text"
                         register={register}
                         errors={errors}
                         maxLength={16}
