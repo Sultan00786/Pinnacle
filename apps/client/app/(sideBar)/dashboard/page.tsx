@@ -47,7 +47,7 @@ function Dashboard() {
    }
    return (
       <div className="flex ">
-         <div className="w-[900px] h-full flex flex-col px-6 gap-6">
+         <div className="w-[900px] h-full flex flex-col px-6 gap-6 relative">
             <DashboardHeadline
                children={
                   <div>

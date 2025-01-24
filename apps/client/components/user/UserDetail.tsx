@@ -44,7 +44,7 @@ function UserDetail({
             </div>
 
             <div>
-               <div className="flex items-center justify-between pt-3 border-t-2">
+               <div className="flex items-center justify-between pt-2 -mt-2 border-t-2">
                   <div className="flex items-center gap-2">
                      <LucideBadgeDollarSign className="h-7 w-7" />
                      <h3 className="font-semibold">Add Money</h3>
@@ -56,7 +56,7 @@ function UserDetail({
             </div>
 
             <div>
-               <div className="flex items-center justify-between pt-3 border-t-2">
+               <div className="flex items-center justify-between pt-2 border-t-2 -mt-2">
                   <div className="flex items-center gap-2">
                      <IdCard className="h-7 w-7" />
                      <h3 className="font-semibold">My Banks</h3>
@@ -65,11 +65,11 @@ function UserDetail({
                      <Plus className="h-5 w-5" />
                   </button>
                </div>
-               <div className="relative top-0 -mt-2 border-b-2 h-[250px]">
-                  <div className=" absolute -top-1 right-2 z-30">
+               <div className="relative top-0 -mt-2 h-[220px] overflow-hidden">
+                  <div className=" absolute -top-2 right-2 z-30">
                      {accounts[0] && <AtmCardComponent account={accounts[0]} />}
                   </div>
-                  <div className=" absolute top-5 -right-4">
+                  <div className=" absolute top-4 -right-4">
                      {accounts[0] && (
                         <AtmCardComponent
                            account={accounts[0]}

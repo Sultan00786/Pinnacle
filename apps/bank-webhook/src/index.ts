@@ -15,7 +15,7 @@ dotenv.config();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-   res.send("Hello World!");
+   res.send("This is Bank webhook server");
 });
 
 app.post("/bankwebhook", async (req, res) => {
@@ -161,5 +161,5 @@ app.post("/bankwebhook", async (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-   console.log("Server is running on port: ", process.env.PORT);
+   console.log(" Bank webhook server is running on port: ", process.env.PORT);
 });
