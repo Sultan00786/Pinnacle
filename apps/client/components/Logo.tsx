@@ -1,7 +1,7 @@
 import Image from "next/image";
 import logo from "../public/logo.png";
 import React from "react";
-import { Kanit } from "@next/font/google";
+import { Kanit } from "next/font/google";
 
 const kaint = Kanit({
    subsets: ["latin"],

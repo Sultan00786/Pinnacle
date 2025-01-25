@@ -1,20 +1,20 @@
 import { AddCardInputProps } from "@repo/interface/interface";
-import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import { createAccount } from "../app/lib/action/createAccount";
+import {SessionType} from "./nextAuth"
 
-interface CustomUser {
-   id: string;
-   name?: string | null;
-   email?: string | null;
-   image?: string | null;
-}
+// interface CustomUser {
+//    id: string;
+//    name?: string | null;
+//    email?: string | null;
+//    image?: string | null;
+// }
 
-// Define a custom type for the session token
-interface CustomSession extends Session {
-   user?: CustomUser;
-   // other properties
-}
+// // Define a custom type for the session token
+// interface CustomSession extends Session {
+//    user?: CustomUser;
+//    // other properties
+// }
 
 export async function nextAuthSignUp(account: AddCardInputProps | null) {
    if (!account) {
@@ -33,7 +33,7 @@ export async function nextAuthSignUp(account: AddCardInputProps | null) {
       throw new Error("Incomplete account data");
    }
 
-   const token = (await getSession()) as CustomSession;
+   const token = (await getSession()) as SessionType;
    if (token?.user?.id) {
       const createAccountRes = await createAccount({
          userId: Number(token?.user?.id),

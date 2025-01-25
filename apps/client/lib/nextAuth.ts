@@ -1,11 +1,21 @@
 import { prisma } from "@repo/db/client";
 import bcrypt from "bcryptjs";
+import { AuthOptions, Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-interface SessionType {
-   user: { id: string };
-   token: string;
+// apps/client/lib/nextAuth.ts
+declare module "next-auth" {
+   interface Session {
+      user: {
+        id: string;
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+      };
+    }
 }
+
+export type SessionType = Session;
 
 type CredentialType = Record<
    | "email"
@@ -18,7 +28,7 @@ type CredentialType = Record<
    string
 >;
 
-export const authOption = {
+export const authOption: AuthOptions = {
    providers: [
       CredentialsProvider({
          name: "Credentials",
@@ -145,15 +155,12 @@ export const authOption = {
    ],
    secret: process.env.NEXT_PUBLIC_JWT_TOKEN,
    callbacks: {
-      async session({
-         session,
-         token,
-      }: {
-         session: SessionType;
-         token: { sub: string };
-      }) {
-         session.user.id = token.sub;
+      async session({ session, token }: {
+         session:Session;
+         token:JWT
+      }){
+         if(token.sub) session.user.id = token.sub;
          return session;
       },
    },
-};
+}

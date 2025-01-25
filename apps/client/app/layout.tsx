@@ -1,4 +1,4 @@
-import { Noto_Sans_Wancho } from "@next/font/google";
+import { Noto_Sans_Wancho } from "next/font/google";
 import type { Metadata } from "next";
 import Provider from "../components/provider";
 import "./globals.css";
