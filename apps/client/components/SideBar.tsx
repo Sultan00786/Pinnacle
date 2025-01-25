@@ -1,20 +1,21 @@
-import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import Logo from "./Logo";
-import {
-   HomeIcon,
-   Wallet2,
-   History,
-   SendHorizontal,
-   Link2,
-   Search,
-   LogOut,
-} from "lucide-react";
-import { Avatar, Button, Modal, ModalContent, User } from "@nextui-org/react";
-import { Button as Button2 } from "@repo/ui/component";
-import { signOut, useSession } from "next-auth/react";
-import getUserDetails from "../app/lib/support/getUserDetails";
+"use client";
+import { Modal, ModalContent, User } from "@nextui-org/react";
 import { UserType } from "@repo/interface/interface";
+import { Button as Button2 } from "@repo/ui/component";
+import {
+   History,
+   HomeIcon,
+   Link2,
+   LogOut,
+   Search,
+   SendHorizontal,
+   Wallet2,
+} from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import getUserDetails from "../app/lib/support/getUserDetails";
+import Logo from "./Logo";
 
 const navigation = [
    { name: "Home", href: "/dashboard", icon: HomeIcon },
@@ -33,10 +34,18 @@ const navigation = [
 ];
 
 function SideBar() {
+   const session = useSession();
    const pathname = usePathname();
    const router = useRouter();
    const [isModal, setIsModal] = useState(false);
    const [user, setUser] = useState<UserType>({} as UserType);
+
+   useEffect(() => {
+      if (!session?.data?.user) {
+         router.push("/login");
+         return;
+      }
+   },[session, router])
 
    useEffect(() => {
       async function func() {

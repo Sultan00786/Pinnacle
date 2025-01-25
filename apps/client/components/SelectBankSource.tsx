@@ -41,7 +41,7 @@ function SelectBankSource({
          >
             {selectData.map((item) => (
                <SelectItem
-                  onChange={(e) => setSelectSource(item.name)}
+                  onChange={() => setSelectSource(item.name)}
                   key={item.name}
                   value={item.name}
                >

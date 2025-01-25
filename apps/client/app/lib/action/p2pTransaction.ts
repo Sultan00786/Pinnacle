@@ -3,13 +3,13 @@ import { prisma } from "@repo/db/client";
 import { getServerSession } from "next-auth";
 import { authOption } from "../../../lib/nextAuth";
 
-enum CategoryP2P {
-   Income,
-   Deposit,
-   Subscirptions,
-   Food,
-   Groceries,
-}
+// enum CategoryP2P {
+//    Income,
+//    Deposit,
+//    Subscirptions,
+//    Food,
+//    Groceries,
+// }
 
 export interface P2Ptype {
    email: string;

@@ -11,7 +11,7 @@ export default function LoginForm() {
    const {
       register,
       handleSubmit,
-      formState: { errors, isSubmitSuccessful },
+      formState: { errors },
    } = useForm<LoginInputProps>();
 
    const router = useRouter();
@@ -84,7 +84,7 @@ export default function LoginForm() {
                Login
             </Button>
             <p className="text-center text-gray-600 mt-4">
-               Don't have an account?{" "}
+               {`Don't have an account?`}
                <span
                   onClick={() => router.push("/signup")}
                   className="text-purple-500 font-semibold cursor-pointer transition-all duration-150 hover:text-purple-700"

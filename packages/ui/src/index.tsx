@@ -1,9 +1,9 @@
 import "./index.css";
 
-import Input from "./component/input.js";
-import Button from "./component/button.js";
-import Loader from "./component/loader.js";
-import PurbleButton from "./component/purbleButton.js";
-import DashboardHeadline from "./component/DashboardHeadline.js";
+import Button from "./component/button";
+import Loader from "./component/loader";
+import PurbleButton from "./component/purbleButton";
+import DashboardHeadline from "./component/DashboardHeadline";
+import Input from "./component/input";
 
 export { Input, Button, Loader, PurbleButton, DashboardHeadline };

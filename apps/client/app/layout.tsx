@@ -1,8 +1,7 @@
-import { Noto_Sans, Noto_Sans_Wancho, Ubuntu } from "@next/font/google";
+import { Noto_Sans_Wancho } from "next/font/google";
 import type { Metadata } from "next";
-import "./globals.css";
 import Provider from "../components/provider";
-import { ToastContainer } from "react-toastify";
+import "./globals.css";
 
 export const metadata: Metadata = {
    title: "Create Next App",

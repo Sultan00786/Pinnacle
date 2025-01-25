@@ -1,13 +1,12 @@
 "use client";
-import React, { useEffect } from "react";
 import {
-   Table,
-   TableHeader,
-   TableColumn,
-   TableBody,
-   TableRow,
-   TableCell,
    Chip,
+   Table,
+   TableBody,
+   TableCell,
+   TableColumn,
+   TableHeader,
+   TableRow,
 } from "@nextui-org/react";
 import { TransactionType } from "@repo/interface/interface";
 import { Dot } from "lucide-react";
@@ -23,14 +22,14 @@ function TableComponent({ table_data }: { table_data: TransactionType[] }) {
          >
             <TableHeader className="custom-header">
                {colums.map((col) => (
-                  <TableColumn>{col}</TableColumn>
+                  <TableColumn key={col}>{col}</TableColumn>
                ))}
             </TableHeader>
             {table_data !== undefined && table_data.length !== 0 ? (
                <TableBody>
                   {table_data.map((tx: TransactionType, index) => (
                      <TableRow
-                        key={tx.id}
+                        key={tx.id + "-" + index}
                         className={`${index !== 0 && "border-t"} ${tx.status === "Success" ? "bg-green-100/30" : tx.status === "Declined" ? "bg-red-100/30" : ""} pb-1`}
                      >
                         <TableCell>

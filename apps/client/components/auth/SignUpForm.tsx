@@ -14,7 +14,7 @@ export default function SignUpForm() {
    const {
       register,
       handleSubmit,
-      formState: { errors, isSubmitSuccessful },
+      formState: { errors },
    } = useForm<SignUpIputProps>();
 
    const onSignUp: SubmitHandler<SignUpIputProps> = async (data) => {

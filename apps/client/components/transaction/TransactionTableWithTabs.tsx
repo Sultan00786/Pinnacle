@@ -1,12 +1,7 @@
 import { Tab, Tabs } from "@nextui-org/react";
 import { AccountType, TransactionType } from "@repo/interface/interface";
-import { useEffect, useState } from "react";
-import { fuctionTxs } from "../../lib/fetchTransaction";
 import BankCard from "./BankCard";
 import TableComponent from "./TableComponent";
-import { Loader } from "@repo/ui/component";
-
-const tabs = ["Bank 1", "Bank 2", "Bank 3", "Bank 4", "Bank 5", "Bank 6"];
 
 function TransactionTableWithTabs({
    table_data,
@@ -39,16 +34,6 @@ function TransactionTableWithTabs({
                   </div>
                </Tab>
             ))}
-            {/* {tabs.map((tab) => (
-               <Tab key={tab} title={tab}>
-                  <div>
-                     <div className=" mb-3">
-                        <BankCard name={tab} amount={5050.98} />
-                     </div>
-                     <TableComponent table_data={table_data} />
-                  </div>
-               </Tab>
-            ))} */}
          </Tabs>
       </div>
    );

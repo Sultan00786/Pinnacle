@@ -40,12 +40,17 @@ export async function creatOnRampTransaction(
             receiveAcc: accountNo.toString(),
          },
       });
-   } catch (error: any) {
-      if (error) console.log(error);
+      if (!result.id)
+         return {
+            success: false,
+            message: "Something went wrong",
+         };
+   } catch (error) {
+      console.log(error);
       return {
          success: false,
          message: "Internal Server Error",
-         error: error,
+         error: `${error}`,
       };
    }
 

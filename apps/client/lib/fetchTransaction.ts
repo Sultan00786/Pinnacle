@@ -1,11 +1,10 @@
+import { TransactionType } from "@repo/interface/interface";
 import { toast } from "react-toastify";
 import getTransaction from "../app/lib/support/getTransaction";
-import { TransactionType } from "@repo/interface/interface";
-import { TransactionCategory } from "@repo/db/client";
 
 export const fuctionTxs = async (
    setTableData: React.Dispatch<React.SetStateAction<TransactionType[]>>,
-   isFull: Boolean = false,
+   isFull: boolean = false,
    filter: string = "All"
 ) => {
    const toastId = "transaction-fetching";
