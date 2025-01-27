@@ -2,7 +2,7 @@
    "name": "Pinnacle",
    "private": true,
    "scripts": {
-      "build": "turbo build",
+      "build": "cd packages/db && prisma generate && cd ../../ && turbo build",
       "dev": "turbo dev",
       "lint": "turbo lint",
       "format": "prettier --write \"**/*.{ts,tsx,md}\""
