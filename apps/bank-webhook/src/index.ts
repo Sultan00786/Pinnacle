@@ -130,7 +130,7 @@ app.post("/bankwebhook", async (req, res) => {
                id: Number(userId),
             },
             data: {
-               totalBalance: Number(amount + totalBalance)
+               totalBalance: Number(amount + totalBalance),
             },
          }),
 

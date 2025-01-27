@@ -1,4 +1,5 @@
 import {
+   Prisma,
    PrismaClient,
    TransactionCategory,
    TransactionStatus,
@@ -6,4 +7,4 @@ import {
 
 const prisma = new PrismaClient();
 
-export { prisma, TransactionCategory, TransactionStatus };
+export { prisma, PrismaClient, Prisma, TransactionCategory, TransactionStatus };
