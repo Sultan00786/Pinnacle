@@ -45,7 +45,7 @@ function SideBar() {
          router.push("/login");
          return;
       }
-   },[session, router])
+   }, [session, router]);
 
    useEffect(() => {
       async function func() {
@@ -107,7 +107,14 @@ function SideBar() {
          </nav>
          <div className="border-t p-4">
             <div className="flex items-center gap-3">
-               <User name={user.firstName} description={user.email} />
+               <User
+                  name={user.firstName}
+                  description={
+                     user?.email?.length > 15
+                        ? user.email.slice(0, 15) + "..."
+                        : user.email
+                  }
+               />
                <button className="p-2 hover:bg-purple-400 hover:text-white rounded-md text-muted-foreground hover:text-foreground transition-colors">
                   <LogOut
                      className="h-5 w-5"

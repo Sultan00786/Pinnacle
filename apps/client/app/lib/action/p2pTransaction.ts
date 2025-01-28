@@ -14,26 +14,31 @@ import { authOption } from "../../../lib/nextAuth";
 export interface P2Ptype {
    email: string;
    source: string;
-   accountNumber: string;
+   toAccountNumber: string;
    amount: number;
 }
 
 export default async function p2pTransaction({
    email,
-   accountNumber,
+   toAccountNumber,
    amount,
    source,
 }: P2Ptype) {
    try {
-      if (!email || !accountNumber || !amount || !source) {
+      // Validate required input fields
+
+      console.log(email, toAccountNumber, amount, source);
+
+      if (!email || !toAccountNumber || !amount || !source) {
          return {
             success: false,
             error: "Please provide all the details",
             message: "Transaction fail !!",
          };
       }
-      const session = await getServerSession(authOption);
 
+      // Retrieve user session and validate login status
+      const session = await getServerSession(authOption);
       if (!session?.user?.id) {
          return {
             success: false,
@@ -42,8 +47,8 @@ export default async function p2pTransaction({
          };
       }
 
+      // Extract and validate sender's user ID
       const fromUserId = Number(session?.user?.id);
-
       if (isNaN(fromUserId)) {
          return {
             success: false,
@@ -52,17 +57,11 @@ export default async function p2pTransaction({
          };
       }
 
+      // Fetch sender's user details, including total balance and accounts
       const fromUser = await prisma.user.findFirst({
-         where: {
-            id: fromUserId,
-         },
-         select: {
-            id: true,
-            totalBalance: true,
-            accounts: true,
-         },
+         where: { id: fromUserId },
+         select: { id: true, totalBalance: true, accounts: true },
       });
-
       if (!fromUser) {
          return {
             success: false,
@@ -71,6 +70,7 @@ export default async function p2pTransaction({
          };
       }
 
+      // Check if sender has sufficient total balance
       if (fromUser.totalBalance < amount) {
          return {
             success: false,
@@ -79,12 +79,10 @@ export default async function p2pTransaction({
          };
       }
 
+      // Fetch recipient user details
       const toUser = await prisma.user.findFirst({
-         where: {
-            email: email,
-         },
+         where: { email: email },
       });
-
       if (!toUser?.id) {
          return {
             success: false,
@@ -93,13 +91,10 @@ export default async function p2pTransaction({
          };
       }
 
+      // Validate recipient's account details
       const toUserAccount = await prisma.account.findFirst({
-         where: {
-            accountNo: accountNumber,
-            userId: toUser.id,
-         },
+         where: { accountNo: toAccountNumber, userId: toUser.id },
       });
-
       if (!toUserAccount) {
          return {
             success: false,
@@ -108,6 +103,7 @@ export default async function p2pTransaction({
          };
       }
 
+      // Verify the recipient account source matches
       if (toUserAccount?.source !== source) {
          return {
             success: false,
@@ -116,143 +112,113 @@ export default async function p2pTransaction({
          };
       }
 
-      await prisma.$transaction(
-         async (
-            txs: Omit<
-               PrismaClient<Prisma.PrismaClientOptions, never>,
-               | "$connect"
-               | "$disconnect"
-               | "$on"
-               | "$transaction"
-               | "$use"
-               | "$extends"
-            >
-         ) => {
-            // reducing balance from multiple accounts of login user
-            let remainingAmount = amount;
-            let i = 0;
+      // Begin database transaction for atomic updates
+      await prisma.$transaction(async (txs: Prisma.TransactionClient) => {
+         // Deduct the amount from multiple sender accounts
+         let remainingAmount = amount;
+         let i = 0;
 
-            while (remainingAmount > 0 && i < fromUser.accounts.length) {
-               const account = fromUser.accounts[i];
-               if (!account) {
-                  throw new Error("Account not found");
-               }
+         // Check if the sender has any accounts
+         if (!fromUser.accounts || fromUser.accounts.length === 0) {
+            throw new Error("No accounts available for this user.");
+         }
 
-               await txs.$queryRaw`SELECT * FROM "Account" WHERE "userId" = ${account.id} FOR UPDATE`;
-               if (account.balance >= remainingAmount) {
-                  await txs.account.update({
-                     where: { id: account.id },
-                     data: {
-                        balance: {
-                           decrement: remainingAmount,
-                        },
-                     },
-                  });
-                  remainingAmount = 0;
-               } else {
-                  await txs.account.update({
-                     where: { id: account.id },
-                     data: {
-                        balance: 0,
-                     },
-                  });
-                  remainingAmount -= account.balance;
-               }
+         // Loop through sender accounts to deduct the amount
+         while (remainingAmount > 0 && i < fromUser.accounts.length) {
+            console.log(remainingAmount);
+            const account = fromUser.accounts[i];
+            if (!account) {
+               throw new Error("Account not found.");
+            }
+
+            // Lock the account for update to avoid race conditions
+            await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${account.id} FOR UPDATE`;
+
+            // Deduct balance or set account balance to zero
+            if (account.balance >= remainingAmount) {
+               await txs.account.update({
+                  where: { id: account.id },
+                  data: { balance: { decrement: remainingAmount } },
+               });
+               break;
+            } else {
+               await txs.account.update({
+                  where: { id: account.id },
+                  data: { balance: 0 },
+               });
+               remainingAmount -= account.balance;
                i++;
             }
-
-            await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${toUserAccount.id} FOR UPDATE`;
-            await txs.account.updateMany({
-               where: {
-                  accountNo: toUserAccount.accountNo,
-               },
-               data: {
-                  balance: {
-                     //  increment: amount*100,
-                     increment: amount,
-                  },
-               },
-            });
-
-            await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${fromUser.id} FOR UPDATE`;
-
-            const formUserRes = await txs.user.update({
-               where: {
-                  id: fromUser.id,
-               },
-               data: {
-                  totalBalance: {
-                     //  decrement: amount*100,
-                     decrement: amount,
-                  },
-               },
-            });
-
-            if (!formUserRes) {
-               return {
-                  success: false,
-                  error: "From Account not found !!",
-                  message: "Transaction fails !!",
-               };
-            }
-
-            await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${toUser.id} FOR UPDATE`;
-            const toUserres = await txs.user.update({
-               where: {
-                  id: toUser.id,
-               },
-               data: {
-                  totalBalance: {
-                     //  increment: amount*100,
-                     increment: Number(amount),
-                  },
-               },
-            });
-
-            if (!toUserres) {
-               return {
-                  success: false,
-                  error: "To Account not found !!",
-                  message: "Transaction fails !!",
-               };
-            }
-
-            const randomNum = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-            const transactionRes = await txs.transaction.create({
-               data: {
-                  amount: Number(amount),
-                  from: fromUser.id,
-                  to: toUser.id,
-                  category:
-                     randomNum === 1
-                        ? "Food"
-                        : randomNum === 2
-                          ? "Groceries"
-                          : "Subscirptions",
-                  status: "Success",
-               },
-            });
-
-            if (!transactionRes) {
-               return {
-                  success: false,
-                  error: "Transaction not created !!",
-                  message: "Transaction fails !!",
-               };
-            }
          }
-      );
 
+         console.log(
+            "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+         );
+
+         // Lock recipient's account for update
+         await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${toUserAccount.id} FOR UPDATE`;
+
+         // Increment recipient's account balance
+         await txs.account.updateMany({
+            where: { accountNo: toUserAccount.accountNo },
+            data: { balance: { increment: amount } },
+         });
+
+         // Update sender's total balance
+         await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${fromUser.id} FOR UPDATE`;
+         const formUserRes = await txs.user.update({
+            where: { id: fromUser.id },
+            data: { totalBalance: { decrement: amount } },
+         });
+
+         if (!formUserRes) {
+            throw new Error("From Account update failed.");
+         }
+
+         // Update recipient's total balance
+         await txs.$queryRaw`SELECT * FROM "User" WHERE "id" = ${toUser.id} FOR UPDATE`;
+         const toUserres = await txs.user.update({
+            where: { id: toUser.id },
+            data: { totalBalance: { increment: Number(amount) } },
+         });
+
+         if (!toUserres) {
+            throw new Error("To Account update failed.");
+         }
+
+         // Create a transaction record
+         const randomNum = Math.floor(Math.random() * 3) + 1;
+         const transactionRes = await txs.transaction.create({
+            data: {
+               amount: amount,
+               from: fromUser.id,
+               to: toUser.id,
+               category:
+                  randomNum === 1
+                     ? "Food"
+                     : randomNum === 2
+                       ? "Groceries"
+                       : "Subscirptions",
+               status: "Success",
+            },
+         });
+
+         if (!transactionRes) {
+            throw new Error("Transaction record creation failed.");
+         }
+      });
+
+      // Return success response
       return {
          success: true,
          message: "Transaction Successful 🎇✨",
       };
    } catch (error) {
-      console.log(error);
+      console.log(error); // Log error for debugging
       return {
          success: false,
          message: "Transaction fails !!",
-         error: error,
+         error: `${error}`, // Include error details in response
       };
    }
 }
