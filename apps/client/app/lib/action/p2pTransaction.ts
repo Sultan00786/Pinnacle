@@ -118,15 +118,16 @@ export default async function p2pTransaction({
 
       await prisma.$transaction(
          async (
-            txs: Omit<
-               PrismaClient<Prisma.PrismaClientOptions, never>,
-               | "$connect"
-               | "$disconnect"
-               | "$on"
-               | "$transaction"
-               | "$use"
-               | "$extends"
-            >
+            txs: Prisma.TransactionClient
+            // txs: Omit<
+            //    PrismaClient<Prisma.PrismaClientOptions, never>,
+            //    | "$connect"
+            //    | "$disconnect"
+            //    | "$on"
+            //    | "$transaction"
+            //    | "$use"
+            //    | "$extends"
+            // >
          ) => {
             // reducing balance from multiple accounts of login user
             let remainingAmount = amount;
