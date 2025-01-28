@@ -40,6 +40,11 @@ function SideBar() {
    const [isModal, setIsModal] = useState(false);
    const [user, setUser] = useState<UserType>({} as UserType);
 
+   if (!session?.data?.user) {
+      router.push("/login");
+      return;
+   }
+
    useEffect(() => {
       if (!session?.data?.user) {
          router.push("/login");
