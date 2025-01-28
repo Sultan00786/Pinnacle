@@ -39,7 +39,7 @@ function TransactionHistrory() {
    }
 
    return (
-      <div className=" px-6">
+      <div className=" px-6 overflow-x-hidden">
          <DashboardHeadline para="Gain Insights and Track Your Transactions Over Time">
             Transaction History
          </DashboardHeadline>

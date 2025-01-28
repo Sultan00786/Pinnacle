@@ -26,7 +26,7 @@ function TransferDetails() {
       const toastId = toast.loading("Please wait...");
       const combine = {
          email: data.email,
-         accountNumber: data.accountNumber,
+         toAccountNumber: data.accountNumber,
          amount: Number(data.amount * 100),
          source: selectSource,
       };

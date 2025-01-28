@@ -19,6 +19,7 @@ function TableComponent({ table_data }: { table_data: TransactionType[] }) {
             classNames={{
                th: " bg-purple-500/80 text-white",
             }}
+            className=""
          >
             <TableHeader className="custom-header">
                {colums.map((col) => (
