@@ -45,7 +45,7 @@ function MyBanks() {
                   Your Bank Accounts
                </h3>
                <div className="  ">
-                  <div className=" absolute top-48 -left-1 z-10 grid grid-cols-3 grid-rows-2 gap-y-4">
+                  <div className=" absolute top-48 left-[255px] z-10 grid grid-cols-3 grid-rows-2 gap-y-4">
                      {user.accounts?.map((account, index) => (
                         <div
                            key={index}

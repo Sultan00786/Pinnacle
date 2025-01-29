@@ -1,6 +1,7 @@
 "use client";
 import {
    AccountType,
+   RootState,
    TransactionType,
    UserType,
 } from "@repo/interface/interface";
@@ -13,10 +14,15 @@ import UserDetail from "../../../components/user/UserDetail";
 import { fuctionTxs } from "../../../lib/fetchTransaction";
 import getUserDetails from "../../lib/support/getUserDetails";
 import RootLaoding from "../../loading";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../../../../packages/store/src/slice/loading";
 
 function Dashboard() {
+   let temp;
    const router = useRouter();
-   const [loading, setLoading] = useState(false);
+   const dispatch = useDispatch();
+   // const [loading, setLoading] = useState(false);
+   const loading = useSelector((state: RootState) => state.loading);
    const [tableData, setTableData] = useState<TransactionType[]>(
       [] as TransactionType[]
    );
@@ -24,14 +30,14 @@ function Dashboard() {
    const [accounts, setAccounts] = useState<AccountType[]>([] as AccountType[]);
 
    async function func() {
-      setLoading(true);
+      temp = dispatch(setLoading(true));
       await fuctionTxs(setTableData);
       const res = await getUserDetails();
       if (res.user) {
          setUser(res.user);
          setAccounts(res.user.accounts);
       }
-      setLoading(false);
+      temp = dispatch(setLoading(false));
    }
 
    useEffect(() => {

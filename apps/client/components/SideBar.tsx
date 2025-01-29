@@ -44,14 +44,6 @@ function SideBar() {
       router.push("/login");
       return;
    }
-
-   // useEffect(() => {
-   //    if (!session?.data?.user) {
-   //       router.push("/login");
-   //       return;
-   //    }
-   // }, [session, router]);
-
    useEffect(() => {
       async function func() {
          const res = await getUserDetails();
@@ -64,7 +56,7 @@ function SideBar() {
    }, []);
 
    return (
-      <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r ">
+      <div className=" fixed flex h-screen min-w-[240px] flex-col bg-card left-0 top-0 border-r ">
          <nav className="flex-1 space-y-1 px-2 py-4">
             <div className=" flex flex-col gap-4">
                <div className="">
@@ -111,12 +103,12 @@ function SideBar() {
             </div>
          </nav>
          <div className="border-t p-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between">
                <User
                   name={user.firstName}
                   description={
-                     user?.email?.length > 15
-                        ? user.email.slice(0, 15) + "..."
+                     user?.email?.length > 20
+                        ? user.email.slice(0, 20) + "..."
                         : user.email
                   }
                />

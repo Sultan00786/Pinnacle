@@ -58,7 +58,9 @@ function TransactionHistrory() {
                </SelectBankSource>
             </div>
          </div>
-         <TableComponent table_data={tableData} />
+         <div className="mb-4">
+            <TableComponent table_data={tableData} />
+         </div>
       </div>
    );
 }
