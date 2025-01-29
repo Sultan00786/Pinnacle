@@ -13,15 +13,16 @@ import TransactionTableWithTabs from "../../../components/transaction/Transactio
 import UserDetail from "../../../components/user/UserDetail";
 import { fuctionTxs } from "../../../lib/fetchTransaction";
 import getUserDetails from "../../lib/support/getUserDetails";
-import RootLaoding from "../../loading";
+import RootLaoding from "../../loading4s";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../../../packages/store/src/slice/loading";
+import { useSession } from "next-auth/react";
 
 function Dashboard() {
    let temp;
+   const session = useSession();
    const router = useRouter();
    const dispatch = useDispatch();
-   // const [loading, setLoading] = useState(false);
    const loading = useSelector((state: RootState) => state.loading);
    const [tableData, setTableData] = useState<TransactionType[]>(
       [] as TransactionType[]

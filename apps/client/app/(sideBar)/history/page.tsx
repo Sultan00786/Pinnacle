@@ -1,11 +1,13 @@
 "use client";
-import { TransactionType } from "@repo/interface/interface";
+import { RootState, TransactionType } from "@repo/interface/interface";
 import { DashboardHeadline, Loader } from "@repo/ui/component";
 import { ListFilter } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SelectBankSource from "../../../components/SelectBankSource";
 import TableComponent from "../../../components/transaction/TableComponent";
 import { fuctionTxs } from "../../../lib/fetchTransaction";
+import { setLoading } from "../../../../../packages/store/src/slice/loading";
 
 const data = [
    { id: "0", name: "All" },
@@ -15,7 +17,9 @@ const data = [
 ];
 
 function TransactionHistrory() {
-   const [loading, setLoading] = useState(false);
+   let temp;
+   const dispatch = useDispatch();
+   const loading = useSelector((state: RootState) => state.loading);
    const [tableData, setTableData] = useState<TransactionType[]>(
       [] as TransactionType[]
    );
@@ -23,9 +27,9 @@ function TransactionHistrory() {
 
    useEffect(() => {
       async function func() {
-         setLoading(true);
+         temp = dispatch(setLoading(true));
          await fuctionTxs(setTableData, true, select);
-         setLoading(false);
+         temp = dispatch(setLoading(false));
       }
       func();
    }, [select]);
