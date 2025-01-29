@@ -19,7 +19,7 @@ function AtmCardComponent({
                <div className="flex justify-between">
                   <div className="flex gap-2">
                      <p className="font-medium tracking-widest">
-                        {account.accountHolder}
+                        {account.source}
                      </p>
                   </div>
                   <Image

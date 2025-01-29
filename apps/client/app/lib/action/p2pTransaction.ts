@@ -15,6 +15,7 @@ export interface P2Ptype {
    email: string;
    source: string;
    toAccountNumber: string;
+   fromAccountNumber: string;
    amount: number;
 }
 
@@ -23,6 +24,7 @@ export default async function p2pTransaction({
    toAccountNumber,
    amount,
    source,
+   fromAccountNumber,
 }: P2Ptype) {
    try {
       // Validate required input fields
@@ -70,11 +72,24 @@ export default async function p2pTransaction({
          };
       }
 
-      // Check if sender has sufficient total balance
-      if (fromUser.totalBalance < amount) {
+      // Validate sender's account details
+      const formAccount = await prisma.account.findFirst({
+         where: { accountNo: fromAccountNumber, userId: fromUserId },
+      });
+      // Check if account exist
+      if (!formAccount) {
          return {
             success: false,
-            error: "Insufficient Balance",
+            error: "Login User Account not found",
+            message: "Transaction fail !!",
+         };
+      }
+
+      // Check if sender has sufficient balance in account
+      if(formAccount.balance < amount) {
+         return {
+            success: false,
+            error: "Insufficient balance",
             message: "Transaction fail !!",
          };
       }
@@ -114,46 +129,54 @@ export default async function p2pTransaction({
 
       // Begin database transaction for atomic updates
       await prisma.$transaction(async (txs: Prisma.TransactionClient) => {
-         // Deduct the amount from multiple sender accounts
-         let remainingAmount = amount;
-         let i = 0;
+         // // Deduct the amount from multiple sender accounts
+         // let remainingAmount = amount;
+         // let i = 0;
 
-         // Check if the sender has any accounts
-         if (!fromUser.accounts || fromUser.accounts.length === 0) {
-            throw new Error("No accounts available for this user.");
-         }
+         // // Check if the sender has any accounts
+         // if (!fromUser.accounts || fromUser.accounts.length === 0) {
+         //    throw new Error("No accounts available for this user.");
+         // }
 
-         // Loop through sender accounts to deduct the amount
-         while (remainingAmount > 0 && i < fromUser.accounts.length) {
-            console.log(remainingAmount);
-            const account = fromUser.accounts[i];
-            if (!account) {
-               throw new Error("Account not found.");
-            }
+         // // Loop through sender accounts to deduct the amount
+         // while (remainingAmount > 0 && i < fromUser.accounts.length) {
+         //    const account = fromUser.accounts[i];
+         //    if (!account) {
+         //       throw new Error("Account not found.");
+         //    }
 
-            // Lock the account for update to avoid race conditions
-            await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${account.id} FOR UPDATE`;
+         //    // Lock the account for update to avoid race conditions
+         //    await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${account.id} FOR UPDATE`;
 
-            // Deduct balance or set account balance to zero
-            if (account.balance >= remainingAmount) {
-               await txs.account.update({
-                  where: { id: account.id },
-                  data: { balance: { decrement: remainingAmount } },
-               });
-               break;
-            } else {
-               await txs.account.update({
-                  where: { id: account.id },
-                  data: { balance: 0 },
-               });
-               remainingAmount -= account.balance;
-               i++;
-            }
-         }
+         //    // Deduct balance or set account balance to zero
+         //    if (account.balance >= remainingAmount) {
+         //       await txs.account.update({
+         //          where: { id: account.id },
+         //          data: { balance: { decrement: remainingAmount } },
+         //       });
+         //       break;
+         //    } else {
+         //       await txs.account.update({
+         //          where: { id: account.id },
+         //          data: { balance: 0 },
+         //       });
+         //       remainingAmount -= account.balance;
+         //       i++;
+         //    }
+         // }
 
-         console.log(
-            "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-         );
+         // console.log(
+         //    "hellow >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+         // );
+
+         // Lock sender's account for update
+         await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${formAccount.id} FOR UPDATE`;
+
+         // Deduct sender's account balance
+         await txs.account.updateMany({
+            where: { accountNo: formAccount.accountNo },
+            data: { balance: { decrement: amount } },
+         });
 
          // Lock recipient's account for update
          await txs.$queryRaw`SELECT * FROM "Account" WHERE "id" = ${toUserAccount.id} FOR UPDATE`;

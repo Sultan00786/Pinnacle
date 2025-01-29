@@ -1,7 +1,7 @@
 "use client";
 import { Modal, ModalContent, User } from "@nextui-org/react";
-import { UserType } from "@repo/interface/interface";
-import { Button as Button2 } from "@repo/ui/component";
+import { RootState, UserType } from "@repo/interface/interface";
+import { Button as Button2, Loader } from "@repo/ui/component";
 import {
    History,
    HomeIcon,
@@ -12,8 +12,10 @@ import {
    Wallet2,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../../packages/store/src/slice/loading";
 import getUserDetails from "../app/lib/support/getUserDetails";
 import Logo from "./Logo";
 
@@ -34,23 +36,15 @@ const navigation = [
 ];
 
 function SideBar() {
+   let temp;
+
    const session = useSession();
    const pathname = usePathname();
    const router = useRouter();
+   const dispatch = useDispatch();
    const [isModal, setIsModal] = useState(false);
    const [user, setUser] = useState<UserType>({} as UserType);
-
-   if (!session?.data?.user) {
-      router.push("/login");
-      return;
-   }
-
-   useEffect(() => {
-      if (!session?.data?.user) {
-         router.push("/login");
-         return;
-      }
-   }, [session, router]);
+   const loading = useSelector((state: RootState) => state.loading);
 
    useEffect(() => {
       async function func() {
@@ -63,8 +57,13 @@ function SideBar() {
       func();
    }, []);
 
+   // if (!session?.data?.user) {
+   //    router.push("/login");
+   //    return;
+   // }
+
    return (
-      <div className="relative flex h-screen w-60 flex-col bg-card left-0 top-0 border-r ">
+      <div className=" fixed flex h-screen min-w-[240px] flex-col bg-card left-0 top-0 border-r ">
          <nav className="flex-1 space-y-1 px-2 py-4">
             <div className=" flex flex-col gap-4">
                <div className="">
@@ -111,12 +110,12 @@ function SideBar() {
             </div>
          </nav>
          <div className="border-t p-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between">
                <User
                   name={user.firstName}
                   description={
-                     user?.email?.length > 15
-                        ? user.email.slice(0, 15) + "..."
+                     user?.email?.length > 20
+                        ? user.email.slice(0, 20) + "..."
                         : user.email
                   }
                />
@@ -136,7 +135,11 @@ function SideBar() {
                   </h1>
                   <div>
                      <div className="flex justify-end gap-2 mt-4">
-                        <Button2 onClick={() => signOut()}>Yes</Button2>
+                        <Button2
+                           onClick={() => signOut({ callbackUrl: "/login" })}
+                        >
+                           Yes
+                        </Button2>
                         <Button2
                            variant="Secondary"
                            onClick={() => setIsModal(false)}
