@@ -45,12 +45,12 @@ function SideBar() {
       return;
    }
 
-   useEffect(() => {
-      if (!session?.data?.user) {
-         router.push("/login");
-         return;
-      }
-   }, [session, router]);
+   // useEffect(() => {
+   //    if (!session?.data?.user) {
+   //       router.push("/login");
+   //       return;
+   //    }
+   // }, [session, router]);
 
    useEffect(() => {
       async function func() {

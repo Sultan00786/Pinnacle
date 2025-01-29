@@ -17,7 +17,7 @@ function SelectBankSource({
    children = (
       <div className="className= w-fit flex gap-2 items-center text-gray-600">
          <CreditCardIcon className=" text-purple-500 " />
-         <p>Select Source of Account</p>
+         <p>Select Recipent's Source of Account</p>
       </div>
    ),
    defaultValue = "All",

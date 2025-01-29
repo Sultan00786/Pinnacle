@@ -1,11 +1,14 @@
 "use client";
-import { Textarea } from "@nextui-org/react";
+import { form, Textarea } from "@nextui-org/react";
 import { Button, Input } from "@repo/ui/component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import p2pTransaction from "../../app/lib/action/p2pTransaction";
 import SelectBankSource from "../SelectBankSource";
+import getUserDetails from "../../app/lib/support/getUserDetails";
+import { AccountType } from "@repo/interface/interface";
+import { IdCard } from "lucide-react";
 
 interface TransferDetail {
    email: string;
@@ -15,6 +18,11 @@ interface TransferDetail {
 
 function TransferDetails() {
    const [selectSource, setSelectSource] = useState("");
+   const [selectSourceNo, setSelectSourceNo] = useState("");
+   const [accountsData, setAccountsData] = useState<
+      { id: string; name: string }[]
+   >([]);
+   const [loading, setLoading] = useState(false);
 
    const {
       register,
@@ -27,6 +35,7 @@ function TransferDetails() {
       const combine = {
          email: data.email,
          toAccountNumber: data.accountNumber,
+         fromAccountNumber: selectSourceNo,
          amount: Number(data.amount * 100),
          source: selectSource,
       };
@@ -49,6 +58,26 @@ function TransferDetails() {
       });
    }
 
+   useEffect(() => {
+      async function func() {
+         setLoading(true);
+         const result = await getUserDetails();
+         console.log(result);
+         if (result.user?.accounts) {
+            const data = result.user.accounts.map(
+               (acc: AccountType, index: number) => ({
+                  id: index.toString(),
+                  name: acc.accountNo,
+               })
+            );
+            setAccountsData(data);
+         }
+
+         setLoading(false);
+      }
+      func();
+   }, []);
+
    return (
       <div className="w-full">
          <form className=" w-full">
@@ -61,33 +90,35 @@ function TransferDetails() {
                </div>
                <div className=" w-full flex gap-8 py-3 border-b">
                   <div className="w-1/2">
-                     <p className=" text-gray-600">Select Source Bank</p>
+                     <p className="text-gray-600">Select Source Bank Number</p>
                      <p className="text-gray-400 text-sm">
-                        Select the bank account you want to ransfer funds from
+                        Select your available bank account number
                      </p>
                   </div>
                   <div className=" w-full pr-[400px]">
-                     <SelectBankSource setSelectSource={setSelectSource} />
+                     <SelectBankSource
+                        selectData={accountsData}
+                        setSelectSource={setSelectSourceNo}
+                     >
+                        <div className=" flex items-center gap-2">
+                           <IdCard className=" text-purple-500 " />
+                           <p className=" text-gray-600">
+                              Select Your Bank Number
+                           </p>
+                        </div>
+                     </SelectBankSource>
                   </div>
                </div>
                <div className=" w-full flex gap-8 py-3 border-b">
                   <div className="w-1/2">
-                     <p className="text-gray-600">Transfer Note (Optional)</p>
+                     <p className=" text-gray-600">Select Source Bank</p>
                      <p className="text-gray-400 text-sm">
-                        Please provide any additional information or
-                        instructions related to the transfer
+                        Select the bank account source you want to ransfer funds
+                        from
                      </p>
                   </div>
                   <div className=" w-full pr-[400px]">
-                     <Textarea
-                        isClearable
-                        className="max-w-full"
-                        defaultValue="I hope this message finds you well. I am transferring $100 to your account for fun. Please confirm once you receive it."
-                        label="Description (Optional)"
-                        placeholder="Description"
-                        variant="bordered"
-                        onClear={() => {}}
-                     />
+                     <SelectBankSource setSelectSource={setSelectSource} />
                   </div>
                </div>
             </div>

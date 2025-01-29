@@ -8,7 +8,7 @@ function DashboardHeadline({
    para: string;
 }) {
    return (
-      <div className=" flex flex-col gap-1 mt-4">
+      <div className=" flex flex-col gap-1 mt-8">
          <h1 className=" font-bold text-3xl">{children}</h1>
          <p className=" text-gray-500">{para}</p>
       </div>
